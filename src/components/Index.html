@@ -1,0 +1,17 @@
+<div class="Index"
+  v-show="db.config.inited">
+
+  <!--
+  <select v-model="db.config.view">
+    <option v-for="v in viewList" :value="v">{{ $t(v) }}</option>
+  </select>
+
+  <input type="text" v-model="db.config.search" />
+  -->
+
+  <NavigationBar 
+    ref="NavigationBar"
+    :db="db">
+  </NavigationBar>
+
+</div>
