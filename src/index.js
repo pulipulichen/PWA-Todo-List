@@ -135,6 +135,8 @@ let VueController = {
         }
       }
 
+      this.db.config.appNameID = cacheKey
+
       return cacheKey
     },
     appID () {

@@ -4,6 +4,7 @@ let config = {
   version: '20221225-0432',
 
   view: 'todo',
+  showConfiguration: false,
   search: '',
   addTodoText: ``,
   focusedTask: null,
@@ -14,6 +15,7 @@ let config = {
 
 let configEnv = {
   appName,
+  appNameID: appName,
   debug: {
     ErrorHandler: {
       verbose: true

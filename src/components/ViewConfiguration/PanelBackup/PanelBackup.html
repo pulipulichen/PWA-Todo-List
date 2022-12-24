@@ -3,8 +3,12 @@
     @click="backup">
     {{ $t('BACKUP') }}
   </button>
-  <button type="button" class="ui disabled button"
-    @click="restore">
+  <button type="button" class="ui button"
+    @click="$refs.FileInput.click()">
     {{ $t('RESTORE') }}
   </button>
+  <input type="file"
+     ref="FileInput"
+     accept=".ods"
+     v-on:change="openFile" />
 </div>

@@ -1,14 +1,37 @@
 <div class="ViewConfiguration">
   <div class="ui segment">
     <h1>{{ $t('TODO') }}</h1>
-    <div>
+    <p>
       {{ $t('Version: ') }}
       {{ db.config.version }}
+    </p>
+    <div class="ui form">
+      <div class="field">
+        <label for="title">{{ $t('Title') }}</label>
+        <div class="ui input"
+          :class="{icon: (db.localConfig.title.trim() !== '')}">
+          <input id="title" type="title" v-model="db.localConfig.title" />
+          <i class="x link icon" @click="db.localConfig.title = ''"
+            v-if="db.localConfig.title.trim() !== ''" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="favicon">{{ $t('Favicon') }}</label>
+        <div class="ui input"
+          :class="{icon: (db.localConfig.favicon.trim() !== '')}">
+          <input id="favicon" type="url" v-model="db.localConfig.favicon" />
+          <i class="x link icon" @click="db.localConfig.favicon = ''"
+            v-if="db.localConfig.favicon.trim() !== ''" />
+        </div>
+      </div>
+      <div class="field">
+        <PanelBackup 
+          ref="PanelBackup"
+          :db="db">
+        </PanelBackup>
+      </div>
     </div>
-    <PanelBackup 
-      ref="PanelBackup"
-      :db="db">
-    </PanelBackup>
+      
   </div>
 
   <Author 

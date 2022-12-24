@@ -3,6 +3,7 @@
 import NavigationBar from './NavigationBar/NavigationBar.vue'
 import TaskList from './TaskList/TaskList.vue'
 import PanelFilter from './PanelFilter/PanelFilter.vue'
+import ViewConfiguration from './ViewConfiguration/ViewConfiguration.vue'
 
 let Index = {
   props: ['db', 'view', 'search'],
@@ -15,7 +16,8 @@ let Index = {
   components: {
     NavigationBar,
     TaskList,
-    PanelFilter
+    PanelFilter,
+    ViewConfiguration
   },
   computed: {
     isInIframe () {
