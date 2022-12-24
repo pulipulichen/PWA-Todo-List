@@ -68,18 +68,18 @@
             :task="task">
           </PanelPriority>
         </div>
-        <div class="column">
+        <div class="center aligned column vertical-center">
           <PanelDueTime 
             ref="PanelDueTime"
             :db="db"
             :task="task">
           </PanelDueTime>
         </div>
-        <div class="column">
-          {{ displayUpdatedTime }}
+        <div class="center aligned column vertical-center">
+          {{ displayModifiedTime }}
         </div>
-        <div class="column">
-          <div class="ui fluid buttons">
+        <div class="right aligned column vertical-center">
+          <div class="ui buttons control-buttons">
             <button type="button" class="ui button" @click="deleteTask">{{ $t('DELETE') }}</button>
             <button type="button" class="ui button" @click="db.config.focusedTask = null">{{ $t('CLOSE') }}</button>
           </div>

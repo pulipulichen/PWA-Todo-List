@@ -119,8 +119,15 @@ let app = {
       // }
       return dayjs(this.task.dueTime).format('M/D')
     },
-    displayUpdatedTime () {
-      return dayjs(this.task.dueTime).format('M/D HH:mm')
+    displayModifiedTime () {
+      // return new Date(this.task.modifiedTime)
+      let modifiedTimeString = dayjs.unix(this.task.modifiedTime / 1000).format('M/D HH:mm')
+      let currentTimeString = dayjs().format('M/D ')
+      if (modifiedTimeString.startsWith(currentTimeString)) {
+        modifiedTimeString = modifiedTimeString.slice(currentTimeString.length).trim()
+      }
+      
+      return modifiedTimeString
     },
     isShowDetail () {
       return (this.task === this.db.config.focusedTask)
