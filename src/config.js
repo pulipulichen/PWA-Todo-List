@@ -1,6 +1,8 @@
 let appName = 'PWA-TODO-LIST'
 
 let config = {
+  version: '20221225-0432',
+
   view: 'todo',
   search: '',
   addTodoText: ``,

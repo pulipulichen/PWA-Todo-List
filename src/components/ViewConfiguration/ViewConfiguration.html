@@ -1,0 +1,18 @@
+<div class="ViewConfiguration">
+  <div class="ui segment">
+    <h1>{{ $t('TODO') }}</h1>
+    <div>
+      {{ $t('Version: ') }}
+      {{ db.config.version }}
+    </div>
+    <PanelBackup 
+      ref="PanelBackup"
+      :db="db">
+    </PanelBackup>
+  </div>
+
+  <Author 
+    ref="Author"
+    :db="db">
+  </Author>
+</div>

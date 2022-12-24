@@ -29,6 +29,11 @@
         v-if="db.config.view === 'todo'">
         <img src="./list-complated.png" />
       </a>
+      <a class="item"
+        :class="{actvie: (db.config.view === 'configuration')}"
+        @click="db.config.view = 'configuration'">
+        <i class="cog icon"></i>
+      </a>
     </div>
   </div>
   <div class="menu-padding"></div>

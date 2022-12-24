@@ -14,14 +14,22 @@
     :db="db">
   </NavigationBar>
 
-  <PanelFilter 
-    ref="PanelFilter"
-    :db="db">
-  </PanelFilter>
+  <div v-show="db.config.view === 'todo' || db.config.view === 'completed'">
+    <PanelFilter 
+      ref="PanelFilter"
+      :db="db">
+    </PanelFilter>
 
-  <TaskList 
-    ref="TaskList"
-    :db="db">
-  </TaskList>
+    <TaskList 
+      ref="TaskList"
+      :db="db">
+    </TaskList>
+  </div>
+  <div v-if="db.config.view === 'configuration'">
+    <ViewConfiguration 
+      ref="ViewConfiguration"
+      :db="db">
+    </ViewConfiguration>
+  </div>
 
 </div>
