@@ -1,12 +1,8 @@
-import dayjs from 'dayjs'
-// import relativeTime from 'dayjs/plugin/relativeTime';
-// dayjs.extend(relativeTime)
-
-// import updateLocale from 'dayjs/plugin/updateLocale';
-// dayjs.extend(updateLocale)
 
 import PanelPriority from './PanelPriority/PanelPriority.vue'
 import PanelDueTime from './PanelDueTime/PanelDueTime.vue'
+import PanelModifiedTime from './PanelModifiedTime/PanelModifiedTime.vue'
+import PanelHeader from './PanelHeader/PanelHeader.vue'
 
 let app = {
   props: ['db', 'task'],
@@ -20,29 +16,15 @@ let app = {
   },
   components: {
     PanelPriority,
-    PanelDueTime
+    PanelDueTime,
+    PanelModifiedTime,
+    PanelHeader
   },
   watch: {
     'db.localConfig.locale'() {
       this.$i18n.locale = this.db.localConfig.locale;
 
-      // dayjs.updateLocale(this.$i18n.locale, {
-      //   relativeTime: {
-      //     future: this.$t("in %s"),
-      //     past: this.$t("%s ago"),
-      //     s: this.$t('a few seconds'),
-      //     m: this.$t("a minute"),
-      //     mm: this.$t("%d minutes"),
-      //     h: this.$t("an hour"),
-      //     hh: this.$t("%d hours"),
-      //     d: this.$t("a day"),
-      //     dd: this.$t("%d days"),
-      //     M: this.$t("a month"),
-      //     MM: this.$t("%d months"),
-      //     y: this.$t("a year"),
-      //     yy: this.$t("%d years")
-      //   }
-      // })
+      
     },
     // 'task.title' () {
     //   this.updateTask()
@@ -81,54 +63,7 @@ let app = {
     }
   },
   computed: {
-    link () {
-      let expression = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/gi;
-      let matches
-      if (this.task.title) {
-        matches = this.task.title.match(expression)
-        if (matches && matches.length > 0) {
-          return matches[0]
-        }
-      }
-        
-      if (this.task.description) {
-        matches = this.task.description.match(expression)
-        if (matches && matches.length > 0) {
-          return matches[0]
-        }
-      }
-        
-      return false
-    },
-    displayDueTime () {
-      if (this.task.dueTime === false) {
-        return false
-      }
-
-      // 計算跟現在距離的時間
-      let currentTime = (new Date()).getTime()
-      let interval = this.task.dueTime - currentTime
-
-      this.isOverdue = (interval < 0)
-
-      // if (interval > 86400000) {
-      //   return dayjs(this.task.dueTime).format('M/D')
-      // }
-      // else {
-      //   return dayjs(this.task.dueTime).fromNow(true)
-      // }
-      return dayjs(this.task.dueTime).format('M/D')
-    },
-    displayModifiedTime () {
-      // return new Date(this.task.modifiedTime)
-      let modifiedTimeString = dayjs.unix(this.task.modifiedTime / 1000).format('M/D HH:mm')
-      let currentTimeString = dayjs().format('M/D ')
-      if (modifiedTimeString.startsWith(currentTimeString)) {
-        modifiedTimeString = modifiedTimeString.slice(currentTimeString.length).trim()
-      }
-      
-      return modifiedTimeString
-    },
+    
     isShowDetail () {
       return (this.task === this.db.config.focusedTask)
       // return false
@@ -159,7 +94,6 @@ let app = {
         this.db.localConfig.tasks.unshift(this.task)
         // console.log(this.db.localConfig.tasks.map(i => i.title))
       }
-      
     },
     deleteTask () {
       let title = this.task.title.trim()
@@ -176,9 +110,39 @@ let app = {
     searchMap () {
       window.open(`https://www.google.com.tw/maps/search/${encodeURIComponent(this.task.location)}/`, '_blank')
     },
-    setTask (field, value) {
+    setTask: async function (field, value) {
       this.task[field] = value
       this.updateTask((field === 'isPinned'))
+
+      if (field === 'isCompleted') {
+        this.checkCompletedListIsEmpty()
+
+        await this.db.utils.AsyncUtils.sleep(0)
+        this.db.config.focusedTask = null
+      }
+    },
+    focusPriorityPanel: async function () {
+      this.db.config.focusedTask = this.task
+      while (!this.$refs.PanelPriority) {
+        await this.db.utils.AsyncUtils.sleep(100)
+      }
+      // await nextTick()
+      this.$refs.PanelPriority.focus()
+    },
+    focusDescription: async function () {
+      this.db.config.focusedTask = this.task
+      while (!this.$refs.TextareaDescription) {
+        await this.db.utils.AsyncUtils.sleep(100)
+      }
+      // await nextTick()
+      this.$refs.TextareaDescription.focus()
+    },
+    checkCompletedListIsEmpty () {
+      let list = this.db.localConfig.tasks.filter(tasks => tasks.isCompleted)
+
+      if (list.length === 0) {
+        this.db.config.view = 'todo'
+      }
     }
   }
 }

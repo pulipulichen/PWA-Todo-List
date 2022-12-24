@@ -1,0 +1,25 @@
+<div class="PanelHeaderMeta">
+  <div :class="{overdue: isOverdue}" v-if="displayDueTime">
+    {{ displayDueTime }}
+  </div>
+
+  <button type="button" class="ui icon transparent basic button meta-button"
+    v-if="task.priority > 0"
+    @click="focusPriorityPanel">
+    <i class="flag icon"
+      :class="{green: (task.priority === 1), yellow: (task.priority === 2), red: (task.priority === 3)}"></i>
+  </button>
+
+  <a :href="link" :title="link" target="_blank" 
+    v-if="link"
+    class="ui icon transparent basic button link-button meta-button">
+    <i class="linkify icon"></i>
+  </a>
+
+  <button type="button" class="ui icon transparent basic button meta-button"
+    @click="setTask('isPinned', !task.isPinned)">
+    <i class="star icon" v-if="task.isPinned" />
+    <i class="star outline icon" v-if="!task.isPinned" />
+  </button>
+
+</div>

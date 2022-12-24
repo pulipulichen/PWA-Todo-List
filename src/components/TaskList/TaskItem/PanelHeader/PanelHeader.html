@@ -1,0 +1,23 @@
+<div class="header row PanelHeader">
+  <div class="title column"
+    @click="db.config.focusedTask = task"
+    @dblclick.prevent="db.config.focusedTask = null"
+    :class="{focused: isFocused}">
+    <div class="ui transparent left icon input">
+      <i class="circle outline link icon" 
+        @click="$parent.setTask('isCompleted', !task.isCompleted)"
+        :class="{'check': task.isCompleted}"></i>
+      <input type="text" :value="task.title" 
+        id="title"
+        @input="$parent.setTask('title', $event.target.value)" 
+        :placeholder="$t(`What's todo...`)"
+        @keyup.enter.exact="$parent.focusDescription">
+    </div>
+  </div>
+  
+  <PanelHeaderMeta 
+    ref="PanelHeaderMeta"
+    :db="db"
+    :task="task">
+  </PanelHeaderMeta>
+</div>

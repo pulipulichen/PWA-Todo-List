@@ -1,3 +1,9 @@
-<div class="PanelDueTime">
-  date {{ task.dueTime }}
+<div class="PanelDueTime field">
+  <label>
+    {{ $t('Due:') }}
+  </label>
+  <input type="datetime-local"
+    :class="{overdue: isOverdue}"
+    :value="date"
+    @change="setDueTime">
 </div>

@@ -2,6 +2,7 @@
 //import $ from 'jquery'
 import NavigationBar from './NavigationBar/NavigationBar.vue'
 import TaskList from './TaskList/TaskList.vue'
+import PanelFilter from './PanelFilter/PanelFilter.vue'
 
 let Index = {
   props: ['db', 'view', 'search'],
@@ -13,7 +14,8 @@ let Index = {
   },
   components: {
     NavigationBar,
-    TaskList
+    TaskList,
+    PanelFilter
   },
   computed: {
     isInIframe () {
@@ -36,6 +38,9 @@ let Index = {
       this.db.config.view = view
     },
     'search' (search) {
+      if (!search) {
+        search = ''
+      }
       this.db.config.search = search
     },
     'db.config.view' () {

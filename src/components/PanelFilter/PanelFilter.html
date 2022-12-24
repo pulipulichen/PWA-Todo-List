@@ -1,0 +1,16 @@
+<div class="PanelFilter ui form">
+  <div class="ui icon input">
+    <i class="search icon"></i>
+    <input type="text" 
+      v-model="db.config.search"
+      :placeholder="$t('Search...')" />
+  </div>
+  <div class="sort-select field">
+    <select v-model="sortAction">
+      <option value="">{{ $t('Sort...') }}</option>
+      <option value="dueTime">{{ $t('Due') }}</option>
+      <option value="priority">{{ $t('Priority') }}</option>
+      <option value="modifiedTime">{{ $t('Updated') }}</option>
+    </select>
+  </div>
+</div>

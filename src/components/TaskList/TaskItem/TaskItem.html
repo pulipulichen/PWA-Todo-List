@@ -1,35 +1,11 @@
 <div class="TaskItem ui vertical segment form"
   :class="{secondary: (isShowDetail || isModified)}">
   <div class="ui grid">
-    <div class="title row">
-      <div class="title column"
-        @click="db.config.focusedTask = task">
-        <div class="ui transparent left icon input">
-          <i class="circle outline link icon" 
-            @click="setTask('isCompleted', !task.isCompleted)"
-            :class="{'check': task.isCompleted}"></i>
-          <input type="text" :value="task.title" @input="setTask('title', $event.target.value)" :placeholder="$t(`What's todo...`)"
-            @keyup.enter.exact="$refs.TextareaDescription.focus">
-        </div>
-      </div>
-      <div class="right column">
-        <div class="ui grid">
-          <div class="column" :class="{overdue: isOverdue}" v-if="displayDueTime">
-            {{ displayDueTime }}
-          </div>
-          <a class="column">
-            <button type="button" class="ui icon transparent basic button pin-button"
-              @click="setTask('isPinned', !task.isPinned)">
-              <i class="star icon" v-if="task.isPinned" />
-              <i class="star outline icon" v-if="!task.isPinned" />
-            </button>
-          </a>
-          <a class="column" :href="link" :title="link" target="_blank" v-if="link">
-            <i class="linkify icon"></i>
-          </a>
-        </div>
-      </div>
-    </div>
+    <PanelHeader 
+      ref="PanelHeader"
+      :db="db"
+      :task="task">
+    </PanelHeader>
     <template v-if="isShowDetail">
       <div class="equal width row">
         <div class="column">
@@ -76,7 +52,11 @@
           </PanelDueTime>
         </div>
         <div class="center aligned column vertical-center">
-          {{ displayModifiedTime }}
+          <PanelModifiedTime 
+            ref="PanelModifiedTime"
+            :db="db"
+            :task="task">
+          </PanelModifiedTime>
         </div>
         <div class="right aligned column vertical-center">
           <div class="ui buttons control-buttons">

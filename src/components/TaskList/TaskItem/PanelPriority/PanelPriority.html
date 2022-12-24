@@ -2,21 +2,25 @@
   <label>{{ $t('Priority:') }}</label>
   <div class="ui basic icon buttons priority-buttons">
     <button class="ui button" 
+      ref="priority0"
       :class="{active: task.priority === 0}" 
       @click="$parent.setTask('priority', 0)">
       <i class="flag outline icon"></i>
     </button>
     <button class="ui green button"
+      ref="priority1"
       :class="{active: task.priority === 1}" 
       @click="$parent.setTask('priority', 1)">
       <i class="flag icon"></i>
     </button>
     <button class="ui yellow button"
+      ref="priority2"
       :class="{active: task.priority === 2}" 
       @click="$parent.setTask('priority', 2)">
       <i class="flag icon"></i>
     </button>
     <button class="ui red button"
+      ref="priority3"
       :class="{active: task.priority === 3}" 
       @click="$parent.setTask('priority', 3)">
       <i class="flag icon"></i>
