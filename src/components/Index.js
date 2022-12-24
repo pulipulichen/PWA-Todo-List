@@ -1,6 +1,7 @@
 /* global Node */
 //import $ from 'jquery'
 import NavigationBar from './NavigationBar/NavigationBar.vue'
+import TaskList from './TaskList/TaskList.vue'
 
 let Index = {
   props: ['db', 'view', 'search'],
@@ -11,7 +12,8 @@ let Index = {
     }
   },
   components: {
-    NavigationBar
+    NavigationBar,
+    TaskList
   },
   computed: {
     isInIframe () {
@@ -67,9 +69,9 @@ let Index = {
         dueTime: false,
         priority: 0,
         isCompleted: false,
-        pinned: false,
+        isPinned: false,
         createTime: time,
-        modifiedTime: time
+        modifiedTime: time,
       }
     }
   }

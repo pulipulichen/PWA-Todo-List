@@ -12,7 +12,7 @@ let app = {
   },
   computed: {
     canAddTodo () {
-      return (this.db.config.addTodoText.trim() === '')
+      return (this.db.config.addTodoText.trim() !== '')
     }
   },
   mounted() {

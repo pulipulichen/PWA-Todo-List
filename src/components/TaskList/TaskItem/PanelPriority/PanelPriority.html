@@ -1,0 +1,25 @@
+<div class="PanelPriority field">
+  <label>{{ $t('Priority:') }}</label>
+  <div class="ui basic icon buttons priority-buttons">
+    <button class="ui button" 
+      :class="{active: task.priority === 0}" 
+      @click="$parent.setTask('priority', 0)">
+      <i class="flag outline icon"></i>
+    </button>
+    <button class="ui green button"
+      :class="{active: task.priority === 1}" 
+      @click="$parent.setTask('priority', 1)">
+      <i class="flag icon"></i>
+    </button>
+    <button class="ui yellow button"
+      :class="{active: task.priority === 2}" 
+      @click="$parent.setTask('priority', 2)">
+      <i class="flag icon"></i>
+    </button>
+    <button class="ui red button"
+      :class="{active: task.priority === 3}" 
+      @click="$parent.setTask('priority', 3)">
+      <i class="flag icon"></i>
+    </button>
+  </div>
+</div>

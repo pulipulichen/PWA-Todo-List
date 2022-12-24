@@ -1,29 +1,35 @@
-<div class="ui top fixed menu NavigationBar">
-  <div class="item">
-    <img src="./favicon.png">
-  </div>
-  <div class="item add-todo">
-    <div class="ui transparent left icon input">
-      <i class="plus icon"
-        :class="{'disabled': !canAddTodo}"
-        @click="addTodo"></i>
-      <input type="text"
-        v-model="db.config.addTodoText"
-        :placeholder="$t(`What's todo...`)"
-        @keyup.enter.exact="addTodo"
-        >
+
+<div class="NavigationBar">
+  <div class="ui top fixed menu"
+    :class="{inverted: (db.config.view === 'completed')}">
+    <div class="item">
+      <img src="./favicon.png">
+    </div>
+    <div class="item add-todo">
+      <div class="ui transparent left icon input">
+        <i class="plus link icon"
+          :class="{'disabled': !canAddTodo}"
+          @click="addTodo"></i>
+        <input type="text"
+          v-model="db.config.addTodoText"
+          :placeholder="$t(`What's todo...`)"
+          @keyup.enter.exact="addTodo"
+          >
+      </div>
+    </div>
+    <div class="right menu"
+        :class="{inverted: (db.config.view === 'completed')}">
+      <a class="item view-toggle"
+        @click="db.config.view = 'todo'"
+        v-if="db.config.view === 'completed'">
+        <img src="./list-todo.png" />
+      </a>
+      <a class="item view-toggle"
+        @click="db.config.view = 'completed'"
+        v-if="db.config.view === 'todo'">
+        <img src="./list-complated.png" />
+      </a>
     </div>
   </div>
-  <div class="right menu">
-    <a class="item view-toggle"
-      @click="db.config.view = 'todo'"
-      v-if="db.config.view === 'completed'">
-      <img src="./list-todo.png" />
-    </a>
-    <a class="item view-toggle"
-      @click="db.config.view = 'completed'"
-      v-if="db.config.view === 'todo'">
-      <img src="./list-complated.png" />
-    </a>
-  </div>
+  <div class="menu-padding"></div>
 </div>

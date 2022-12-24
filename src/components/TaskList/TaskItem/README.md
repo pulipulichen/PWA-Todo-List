@@ -1,7 +1,8 @@
 
 ````html
-<ComponentTemplate 
-  ref="ComponentTemplate"
-  :db="db">
-</ComponentTemplate>
+<TaskItem 
+  ref="TaskItem"
+  :db="db"
+  :task="task">
+</TaskItem>
 ````

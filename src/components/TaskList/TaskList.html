@@ -1,3 +1,8 @@
 <div class="TaskList">
-  Hello World
+  <TaskItem 
+    v-for="task in filteredTaskList"
+    ref="TaskItem"
+    :db="db"
+    :task="task">
+  </TaskItem>
 </div>

@@ -1,3 +1,93 @@
-<div class="ComponentTemplate">
-  Hello World
+<div class="TaskItem ui vertical segment form"
+  :class="{secondary: (isShowDetail || isModified)}">
+  <div class="ui grid">
+    <div class="title row">
+      <div class="title column"
+        @click="db.config.focusedTask = task">
+        <div class="ui transparent left icon input">
+          <i class="circle outline link icon" 
+            @click="setTask('isCompleted', !task.isCompleted)"
+            :class="{'check': task.isCompleted}"></i>
+          <input type="text" :value="task.title" @input="setTask('title', $event.target.value)" :placeholder="$t(`What's todo...`)"
+            @keyup.enter.exact="$refs.TextareaDescription.focus">
+        </div>
+      </div>
+      <div class="right column">
+        <div class="ui grid">
+          <div class="column" :class="{overdue: isOverdue}" v-if="displayDueTime">
+            {{ displayDueTime }}
+          </div>
+          <a class="column">
+            <button type="button" class="ui icon transparent basic button pin-button"
+              @click="setTask('isPinned', !task.isPinned)">
+              <i class="star icon" v-if="task.isPinned" />
+              <i class="star outline icon" v-if="!task.isPinned" />
+            </button>
+          </a>
+          <a class="column" :href="link" :title="link" target="_blank" v-if="link">
+            <i class="linkify icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <template v-if="isShowDetail">
+      <div class="equal width row">
+        <div class="column">
+          <div class="field">
+            <label>{{ $t('Description') }}</label>
+            <textarea :value="task.description" 
+              @input="setTask('description', $event.target.value)" 
+              ref="TextareaDescription"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="equal width row">
+        <div class="column">
+        <div class="field">
+          <label>{{ $t('Location') }}</label>
+
+          <div class="ui action input">
+            <input type="text" 
+              :value="task.location"
+              @input="setTask('location', $event.target.value)" />
+            <button class="ui icon button"
+              :class="{disabled: (task.location.trim() === '')}"
+              @click="searchMap">
+              <i class="map icon"></i>
+            </button>
+          </div>
+            
+        </div>
+      </div>
+      </div>
+      <div class="equal width row">
+        <div class="column">
+          <PanelPriority 
+            ref="PanelPriority"
+            :db="db"
+            :task="task">
+          </PanelPriority>
+        </div>
+        <div class="column">
+          <PanelDueTime 
+            ref="PanelDueTime"
+            :db="db"
+            :task="task">
+          </PanelDueTime>
+        </div>
+        <div class="column">
+          {{ displayUpdatedTime }}
+        </div>
+        <div class="column">
+          <div class="ui fluid buttons">
+            <button type="button" class="ui button" @click="deleteTask">{{ $t('DELETE') }}</button>
+            <button type="button" class="ui button" @click="db.config.focusedTask = null">{{ $t('CLOSE') }}</button>
+          </div>
+            
+        </div>
+      </div>
+    </template>  
+  </div>
+</div>
+
 </div>

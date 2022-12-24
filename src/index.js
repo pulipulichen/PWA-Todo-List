@@ -112,7 +112,7 @@ let VueController = {
   },
   i18n: i18n,
   components: {
-    'index': Index
+    Index
   },
   router,
   computed: {

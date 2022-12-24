@@ -3,7 +3,9 @@ let appName = 'PWA-TODO-LIST'
 let config = {
   view: 'todo',
   search: '',
-  addTodoText: ``
+  addTodoText: ``,
+  focusedTask: null,
+  highlightTask: null
 }
 
 // ----------------------------------------------------------------
