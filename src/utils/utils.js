@@ -7,6 +7,7 @@ import DataUtils from './DataUtils.js'
 import PopupUtils from './PopupUtils.js'
 import StringUtils from './StringUtils.js'
 import FileSystemUtils from './FileSystemUtils.js'
+import DateUtils from './DateUtils.js'
 import './date-helper.js'
 
 export default {
@@ -18,5 +19,6 @@ export default {
   DataUtils,
   PopupUtils,
   StringUtils,
-  FileSystemUtils
+  FileSystemUtils,
+  DateUtils
 }

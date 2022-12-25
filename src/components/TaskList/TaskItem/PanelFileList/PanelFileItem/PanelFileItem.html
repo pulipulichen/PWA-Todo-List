@@ -1,0 +1,39 @@
+<div class="PanelFileItem row">
+  <div class="thumbnail column">
+    t
+  </div>
+  <div class="filename column">
+    <a :href="fileSystemURL"
+      :title="file"
+      :download="file">
+      {{ file }}
+    </a>
+  </div>
+  <div class="meta column">
+    <div class="info"
+      v-if="modificationTime">
+      {{ modificationTime}}
+    </div>
+    <div class="info"
+      v-if="size">
+      {{ size}}
+    </div>
+    <button type="button"
+      class="ui icon button"
+      @click="remove">
+      <i class="x icon" />
+    </button>
+    <a class="ui icon button"
+      :title="file"
+      :href="fileSystemURL"
+      taget="_blank">
+      <i class="open external icon" />
+    </a>
+    <a class="ui icon button"
+      :title="file"
+      :href="fileSystemURL"
+      :download="file">
+      <i class="download icon" />
+    </a>
+  </div>
+</div>

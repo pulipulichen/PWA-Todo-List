@@ -13,29 +13,35 @@
             <label>{{ $t('Description') }}</label>
             <textarea :value="task.description" 
               @input="setTask('description', $event.target.value)" 
+              @keyup.esc.exact="db.config.focusedTask = null"
               ref="TextareaDescription"></textarea>
           </div>
         </div>
       </div>
       <div class="equal width row">
         <div class="column">
-        <div class="field">
-          <label>{{ $t('Location') }}</label>
+          <div class="field">
+            <label>{{ $t('Location') }}</label>
 
-          <div class="ui action input">
-            <input type="text" 
-              :value="task.location"
-              @input="setTask('location', $event.target.value)" />
-            <button class="ui icon button"
-              :class="{disabled: (task.location.trim() === '')}"
-              @click="searchMap">
-              <i class="map icon"></i>
-            </button>
+            <div class="ui action input">
+              <input type="text" 
+                :value="task.location"
+                @input="setTask('location', $event.target.value)"
+                @keyup.esc.exact="db.config.focusedTask = null" />
+              <button class="ui icon button"
+                :class="{disabled: (task.location.trim() === '')}"
+                @click="searchMap">
+                <i class="map icon"></i>
+              </button>
+            </div>
           </div>
-            
         </div>
       </div>
-      </div>
+      <PanelFileList 
+        ref="PanelFileList"
+        :db="db"
+        :task="task">
+      </PanelFileList>
       <div class="equal width row">
         <div class="controller column">
           <PanelPriority 
@@ -68,6 +74,4 @@
       </div>
     </template>  
   </div>
-</div>
-
 </div>

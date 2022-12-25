@@ -74,7 +74,7 @@ let app = {
           //   continue
           // }
           let value = task[this.timeFields[i]]
-          console.log(value, typeof(value))
+          // console.log(value, typeof(value))
           if (value !== false) {
             task[this.timeFields[i]] = new Date(value).toUTCString()
           }
@@ -82,6 +82,26 @@ let app = {
             task[this.timeFields[i]] = ''
           }
         }
+
+        let keys = Object.keys(task)
+        for (let i = 0; i < keys.length; i++) {
+          let key = keys[i]
+          let value = task[key]
+
+          if (this.timeFields.indexOf(key) > -1) {
+            if (value !== false) {
+              task[key] = new Date(value).toUTCString()
+            }
+            else {
+              task[key] = ''
+            }
+          }
+
+          if (Array.isArray(value)) {
+            task[key] = value.join('\n')
+          }
+        }
+
         return task
       })
 
@@ -144,7 +164,7 @@ let app = {
         this.db.localConfig[key] = data['configuration'][key]
       })
       this.db.config.showConfiguration = false
-  },
+    },
     loadURLODS: function (url) {
 
       return new Promise((resolve) => {

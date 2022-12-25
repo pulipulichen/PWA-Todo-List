@@ -11,7 +11,8 @@
         id="title"
         @input="$parent.setTask('title', $event.target.value)" 
         :placeholder="$t(`What's todo...`)"
-        @keyup.enter.exact="$parent.focusDescription">
+        @keyup.enter.exact="$parent.focusDescription"
+        @keyup.esc.exact="db.config.focusedTask = null">
     </div>
   </div>
   

@@ -50,11 +50,13 @@ let app = {
         return 0
       })
 
+      this.db.config.focusedTask = list[0]
+
       return list
     }
   },
   mounted() {
-    
+    // this.testFocusFirst ()
   },
   methods: {
     

@@ -3,6 +3,7 @@ import PanelPriority from './PanelPriority/PanelPriority.vue'
 import PanelDueTime from './PanelDueTime/PanelDueTime.vue'
 import PanelModifiedTime from './PanelModifiedTime/PanelModifiedTime.vue'
 import PanelHeader from './PanelHeader/PanelHeader.vue'
+import PanelFileList from './PanelFileList/PanelFileList.vue'
 
 let app = {
   props: ['db', 'task'],
@@ -18,7 +19,8 @@ let app = {
     PanelPriority,
     PanelDueTime,
     PanelModifiedTime,
-    PanelHeader
+    PanelHeader,
+    PanelFileList
   },
   watch: {
     'db.localConfig.locale'() {
@@ -50,7 +52,7 @@ let app = {
     'db.config.highlightTask': async function () {
       // await this.db.utils.AsyncUtils.sleep(100)
       if (this.db.config.highlightTask === this.task.modifiedTime) {
-        console.log(this.db.config.highlightTask, this.task.modifiedTime)
+        // console.log(this.db.config.highlightTask, this.task.modifiedTime)
         this.isModified = true
         clearTimeout(this.isModifiedTimer)
         this.isModifiedTimer = setTimeout(() => {

@@ -13,9 +13,10 @@ export default {
   //type: window.PERSISTENT,
   quota: CONFIG.quotaInMB * 1024 * 1024 /*5MB*/,
   fs: null,
+  base: '',
   currentBaseUrl: null,
   // inited: false,
-  init: function () {
+  init: function (base) {
     return new Promise((resolve, reject) => {
       try {
         // Note: The file system has been prefixed as of Google Chrome 12:
@@ -30,6 +31,9 @@ export default {
             (fs) => {
               this.fs = fs
               // this.inited = true
+              if (base) {
+                this.base = base
+              }
               resolve()
             },
             (e) => {
@@ -124,7 +128,11 @@ Message: ${e.message}`
   },
   createDir: function (rootDirEntry, folders) {
     if (rootDirEntry && !folders) {
-      folders = rootDirEntry
+      folders = this.parsePath(rootDirEntry)
+      if (folders.endsWith('/') === false && 
+        folders.indexOf('/') > -1) {
+        folders = folders.slice(0, folders.lastIndexOf('/') + 1)
+      }
       rootDirEntry = this.fs.root
     }
 
@@ -423,9 +431,24 @@ Message: ${e.message}`
   },
   writeFile(filePath, file, dupCount = 0) {
 
+    if (filePath.startsWith('./')) {
+      filePath = filePath.slice(2)
+    }
+    if (filePath.startsWith('/')) {
+      filePath = filePath.slice(1)
+    }
+
+    if (this.base !== '' && filePath.startsWith('/' + this.base + '/') === false) {
+      filePath = '/' + this.base + '/' + filePath
+    }
+
+    // filePath = '/tmp.txt'
+    // console.log('go write file', filePath)
+
     return new Promise(async (resolve, reject) => {
-      //console.log(['go write file', filePath])
-      fs.root.getFile(filePath, {
+      await this.createDir(filePath)
+
+      this.fs.root.getFile(filePath, {
         create: true, exclusive: true
       }, (fileEntry) => {
         //console.log(filePath)
@@ -445,19 +468,43 @@ Message: ${e.message}`
           // name: "InvalidModificationError"
           dupCount++
 
-          let pathPart1 = filePath.slice(0, filePath.lastIndexOf('.'))
-          let pathPart2 = filePath.slice(filePath.lastIndexOf('.'))
-          filePath = pathPart1 + '_' + dupCount + pathPart2
+          let reg = /_[0-9]+\.[a-zA-Z0-9]+$/
+          if (reg.test(filePath)) {
+            let pathPart1 = filePath.slice(0, filePath.lastIndexOf('_'))
+            let pathPart2 = filePath.slice(filePath.lastIndexOf('.'))
+            filePath = pathPart1 + '_' + dupCount + pathPart2
+          }
+          else {
+            let pathPart1 = filePath.slice(0, filePath.lastIndexOf('.'))
+            let pathPart2 = filePath.slice(filePath.lastIndexOf('.'))
+            filePath = pathPart1 + '_' + dupCount + pathPart2
+          }
+            
           let url = await this.writeFile(filePath, file, dupCount)
           return resolve(url)
         }
         else {
-          //console.log(['error2', e])
+          // console.log('error2', e)
           // this.errorHandler(e)
           return reject(e)
         }
       });
     })
+  },
+  parsePath (path) {
+    if (path.startsWith('./')) {
+      path = path.slice(1)
+    }
+
+    if (!path.startsWith('/')) {
+      path = '/' + path
+    }
+
+    if (this.base !== '' && path.startsWith('/' + this.base + '/') === false) {
+      path = '/' + this.base + '/' + path
+    }
+
+    return path
   },
   remove: function (path) {
     // if (InitHelper.ready === false) {
@@ -467,6 +514,7 @@ Message: ${e.message}`
     }
 
     let fs = this.fs
+    path = this.parsePath(path)
     //let errorHandler = this.errorHandler
     return new Promise(async (resolve, reject) => {
 
@@ -536,6 +584,10 @@ Message: ${e.message}`
     if (path.startsWith('/') === false) {
       path = '/' + path
     }
+    if (this.base !== '' && 
+      path.startsWith('/' + this.base) === false) {
+      path = '/' + this.base + path
+    }
 
     return 'filesystem:' + location.protocol + '//' + location.host + '/' + fsType + path
   },
@@ -547,83 +599,80 @@ Message: ${e.message}`
     path = decodeURIComponent(path)
     return path
   },
-  readEventFilesText: function (files) {
-    //console.log(typeof(files.name))
-    let isArray = true
-    if (typeof (files.name) === 'string') {
-      //if (files.length > 1) {
-      files = [files]
-      isArray = false
-    }
+  // readEventFilesText: function (files) {
+  //   //console.log(typeof(files.name))
+  //   let isArray = true
+  //   if (typeof (files.name) === 'string') {
+  //     //if (files.length > 1) {
+  //     files = [files]
+  //     isArray = false
+  //   }
 
-    let output = []
-    let i = 0
+  //   let output = []
+  //   let i = 0
 
-    let reader = new FileReader();
+  //   let reader = new FileReader();
 
-    return new Promise(async (resolve, reject) => {
-      reader.onload = function (event) {
-        let result = event.target.result
-        output.push(result)
-        i++
-        loop(i)
-      };
+  //   return new Promise(async (resolve, reject) => {
+  //     reader.onload = function (event) {
+  //       let result = event.target.result
+  //       output.push(result)
+  //       i++
+  //       loop(i)
+  //     };
 
-      let loop = (i) => {
-        if (i < files.length) {
-          let file = files[i]
-          //console.log(file);
-          //reader.readAsDataURL(file);
-          reader.readAsText(file)
-        }
-        else {
-          if (isArray === false) {
-            output = output[0]
-          }
-          // triggerCallback(callback, output)
-          resolve(output)
-        }
-      }
-      loop(i)
-    })
+  //     let loop = (i) => {
+  //       if (i < files.length) {
+  //         let file = files[i]
+  //         //console.log(file);
+  //         //reader.readAsDataURL(file);
+  //         reader.readAsText(file)
+  //       }
+  //       else {
+  //         if (isArray === false) {
+  //           output = output[0]
+  //         }
+  //         // triggerCallback(callback, output)
+  //         resolve(output)
+  //       }
+  //     }
+  //     loop(i)
+  //   })
 
       
-  },
-  stripAssetFileSystemPrefix: function (url) {
-    if (url === null || 
-      typeof (url) !== 'string' || 
-      !url.startsWith('filesystem:') || 
-      url.lastIndexOf('/assets/') === -1) {
-      return url
-    }
+  // },
+  // stripAssetFileSystemPrefix: function (url) {
+  //   if (url === null || 
+  //     typeof (url) !== 'string' || 
+  //     !url.startsWith('filesystem:') || 
+  //     url.lastIndexOf('/assets/') === -1) {
+  //     return url
+  //   }
 
-    return url.slice(url.lastIndexOf('/assets/') + 1)
+  //   return url.slice(url.lastIndexOf('/assets/') + 1)
 
-  },
-  appendAssetFileSystemPrefix: function (url, postId) {
-    if (typeof (url) !== 'string') {
-      return ''
-    }
+  // },
+  // appendAssetFileSystemPrefix: function (url, postId) {
+  //   if (typeof (url) !== 'string') {
+  //     return ''
+  //   }
 
-    if (this.currentBaseUrl === null) {
-      let currentBaseUrl = location.href
-      this.currentBaseUrl = currentBaseUrl.slice(0, currentBaseUrl.lastIndexOf('/') + 1)
-    }
+  //   if (this.currentBaseUrl === null) {
+  //     let currentBaseUrl = location.href
+  //     this.currentBaseUrl = currentBaseUrl.slice(0, currentBaseUrl.lastIndexOf('/') + 1)
+  //   }
 
-    //console.log(['filterImageListToFileSystem url 1:', url])
-    if (url.startsWith(this.currentBaseUrl) === false
-      && (
-        url.startsWith('//')
-        || url.startsWith('http://')
-        || url.startsWith('https://'))) {
-      return url
-    }
-    // filesystem:http://localhost:8383/temporary/2/assets/2019-0406-062107.png
-    url = url.slice(url.lastIndexOf('/assets/') + 1)
-    url = `/${postId}/${url}`
-    //console.log(['filterImageListToFileSystem url 2:', this.getFileSystemUrl(url)])
-    return this.getFileSystemUrl(url)
-  },
+  //   //console.log(['filterImageListToFileSystem url 1:', url])
+  //   if (url.startsWith(this.currentBaseUrl) === false && 
+  //     (url.startsWith('//') || url.startsWith('http://') || url.startsWith('https://'))) {
+  //     return url
+  //   }
+  //   // filesystem:http://localhost:8383/temporary/2/assets/2019-0406-062107.png
+  //   url = url.slice(url.lastIndexOf('/assets/') + 1)
+  //   url = `/${postId}/${url}`
+  //   //console.log(['filterImageListToFileSystem url 2:', this.getFileSystemUrl(url)])
+  //   return this.getFileSystemUrl(url)
+  // },
   statsticQuotaUsage: function () {
     let storage = navigator.webkitTemporaryStorage
     if (this.type === window.PERSISTENT) {
@@ -655,7 +704,7 @@ Message: ${e.message}`
           // this.errorHandler(e)
           reject(e)
         }
-      }
+      } 
       let fileList = []
       fs.root.getDirectory(path, {}, (dirEntry) => {
         var dirReader = dirEntry.createReader()
@@ -715,7 +764,6 @@ Message: ${e.message}`
       }, errorHandler);
     })
   },
-
   move: function (oldPath, newPath) {
     let fs = this.fs
     oldPath = this.resolveFileSystemUrl(oldPath)
@@ -749,7 +797,56 @@ Message: ${e.message}`
 
       }, errorHandler);
     })
-      
+  },
+  sleep: function (ms = 500) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  },
+  getFileMetadata: async function (path) {
+    while (!this.fs) {
+      await this.sleep(100)
+    }
+
+    path = this.parsePath(path)
+
+    return new Promise(async (resolve, reject) => {
+      this.fs.root.getFile(path, {}, (fileEntry) => {
+        fileEntry.getMetadata(({modificationTime, size}) => {
+          size = this.humanFileSize(size)
+          resolve({modificationTime, size})
+        }, reject)
+      })
+    })
+  },
+  /**
+ * Format bytes as human-readable text.
+ * 
+ * @param bytes Number of bytes.
+ * @param si True to use metric (SI) units, aka powers of 1000. False to use 
+ *           binary (IEC), aka powers of 1024.
+ * @param dp Number of decimal places to display.
+ * 
+ * @return Formatted string.
+ */
+  humanFileSize: function (bytes, si=false, dp=1) {
+    const thresh = si ? 1000 : 1024;
+
+    if (Math.abs(bytes) < thresh) {
+      return bytes + ' B';
+    }
+
+    const units = si 
+      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    const r = 10**dp;
+
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+    return bytes.toFixed(dp) + ' ' + units[u];
   }
 }
 

@@ -62,7 +62,7 @@ let Index = {
       this.db.config.search = this.search
     }
 
-    this.testFileSystem()
+    this.initFileSystem()
   },
   methods: {
     pushRouter: async function () {
@@ -85,6 +85,7 @@ let Index = {
         isPinned: false,
         createTime: time,
         modifiedTime: time,
+        files: []
       }
 
       this.db.localConfig.taskCount++
@@ -94,17 +95,8 @@ let Index = {
     cleanTask (task) {
       console.log('@TODO cleanTask')
     },
-    testFileSystem: async function () {
-      let fs = this.db.utils.FileSystemUtils
-      await fs.init()
-      // await fs.createDir('test')
-      let url = await fs.writeFromString('/tmp/ok.txt', 'okkk?')
-      // window.open(url, '_blank')
-      console.log('gogo', url)
-
-      await fs.remove('/tmp/ok.txt')
-
-      console.log('deleted', url)
+    initFileSystem: async function () {
+      await this.db.utils.FileSystemUtils.init(this.db.config.appNameID)
     }
   }
 }

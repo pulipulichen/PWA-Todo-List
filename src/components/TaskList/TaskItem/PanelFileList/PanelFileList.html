@@ -1,0 +1,25 @@
+<div class="equal width row PanelFileList">
+  <div class="column">
+    <div class="ui grid">
+      <div class="row header">
+        <div class="header column">
+          <label>
+            {{ $t('Files') }}
+            <span class="file-counter" v-if="task.files.length > 0">({{ task.files.length }})</span>
+          </label>
+        </div>
+        <div class="right aligned meta column">
+          <button type="button" class="ui icon button" @click="removeFiles" v-if="task.files.length > 0">
+            <i class="trash icon" />
+          </button>
+          <button type="button" class="ui icon button" @click="$refs.FileInput.click()">
+            <i class="upload icon" />
+          </button>
+          <input type="file" ref="FileInput" v-on:change="openFile" />
+        </div>
+      </div>
+      <PanelFileItem v-for="file in task.files" ref="PanelFileItem" :db="db" :task="task" :file="file">
+      </PanelFileItem>
+    </div>
+  </div>
+</div>
