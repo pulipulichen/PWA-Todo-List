@@ -1,0 +1,8 @@
+<div class="DropZone"
+  v-show="isDragging"
+  @drop="dropHandler"
+  @dragover="dragOverHandler"
+  @dragleave="dragLeaveHandler"
+  @mouseout="dragLeaveHandler">
+  <p>{{ $t('Drag one or more files to here.') }}</p>
+</div>

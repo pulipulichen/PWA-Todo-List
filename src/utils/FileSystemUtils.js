@@ -494,6 +494,13 @@ Message: ${e.message}`
     })
   },
   parsePath (path) {
+    if (typeof(path) === 'number') {
+      path = String(path)
+    }
+    else {
+      path = decodeURIComponent(path)
+    }
+
     if (path.startsWith('./')) {
       path = path.slice(1)
     }
@@ -601,6 +608,13 @@ Message: ${e.message}`
     path = decodeURIComponent(path)
     return path
   },
+  basename: function (path) {
+    path = this.resolveFileSystemUrl(path)
+    if (path.lastIndexOf('/') > -1) {
+      path = path.slice(path.lastIndexOf('/') + 1)
+      }
+    return path
+  },
   // readEventFilesText: function (files) {
   //   //console.log(typeof(files.name))
   //   let isArray = true
@@ -691,6 +705,8 @@ Message: ${e.message}`
   },
   _list: function (path) {
     let fs = this.fs
+
+    path = this.parsePath(path)
 
     return new Promise(async (resolve, reject) => {
       let errorHandler = (e) => {
@@ -813,10 +829,11 @@ Message: ${e.message}`
     return new Promise(async (resolve, reject) => {
       this.fs.root.getFile(path, {}, (fileEntry) => {
         fileEntry.getMetadata(({modificationTime, size}) => {
+          let sizeNumber = size
           size = this.humanFileSize(size)
           let fileMIME = mime.lookup(path)
           let fileMIMEicon = fileMIME.replace(/\//g, '-')
-          resolve({modificationTime, size, mime: fileMIME, mimeIcon: fileMIMEicon})
+          resolve({modificationTime, size, sizeNumber, mime: fileMIME, mimeIcon: fileMIMEicon})
         }, reject)
       })
     })

@@ -14,6 +14,11 @@
     :db="db">
   </NavigationBar>
 
+  <DropZone 
+    ref="DropZone"
+    :db="db">
+  </DropZone>
+
   <div v-show="!db.config.showConfiguration">
     <PanelFilter 
       ref="PanelFilter"
@@ -24,7 +29,9 @@
       ref="TaskList"
       :db="db">
     </TaskList>
+
   </div>
+
   <ViewConfiguration 
     v-if="db.config.showConfiguration"
     ref="ViewConfiguration"

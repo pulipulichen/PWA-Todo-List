@@ -1,0 +1,15 @@
+<div class="PanelHeadMetaFile">
+  <a class="thumbnail"
+    :href="fileSystemURL"
+    :title="file"
+    v-if="mimeIcon"
+    :style="{'background-image': thumbnail}"
+    @click.prevent.stop="clickThumbnail">
+  </a>
+  <a class="counter" 
+    v-if="this.task.files.length > 1"
+    @click="focusFilelist">
+    <i class="x icon"></i>
+    {{ this.task.files.length }}
+  </a>
+</div>

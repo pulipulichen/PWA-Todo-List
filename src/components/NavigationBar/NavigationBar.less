@@ -1,14 +1,25 @@
-.add-todo {
-  width: calc(100% - 13.7rem);
+.fixed.menu {
+  flex-wrap: nowrap;
 
-  .icon.disabled {
-    visibility: hidden !important;
-  }
+  .item {
+    width: fit-content !important;
 
-  &:before {
-    background: transparent !important;
+    &.add-todo {
+      // width: calc(100% - 13.7rem);
+      // width: 100% !important;
+  
+      .icon.disabled {
+        visibility: hidden !important;
+      }
+  
+      &:before {
+        background: transparent !important;
+      }
+    }
   }
 }
+
+
 
 .menu-padding {
   height: 60px;
@@ -17,5 +28,12 @@
 .inverted {
   img {
     filter: invert(1);
+  }
+}
+
+.view-toggle {
+  img {
+    height: 1.5rem !important;
+    width: auto !important;
   }
 }

@@ -1,3 +1,5 @@
+import ItemFileUpload from './ItemFileUpload/ItemFileUpload.vue'
+
 let app = {
   props: ['db'],
   data () {    
@@ -9,6 +11,9 @@ let app = {
     'db.localConfig.locale'() {
       this.$i18n.locale = this.db.localConfig.locale;
     },
+  },
+  components: {
+    ItemFileUpload
   },
   computed: {
     canAddTodo () {
@@ -27,6 +32,12 @@ let app = {
         return false
       }
       return favicon
+    },
+    hasTodoTasks () {
+      return (this.db.localConfig.tasks.filter(t => !t.isCompleted).length > 0)
+    },
+    hasCompletedTasks () {
+      return (this.db.localConfig.tasks.filter(t => t.isCompleted).length > 0)
     }
   },
   mounted() {

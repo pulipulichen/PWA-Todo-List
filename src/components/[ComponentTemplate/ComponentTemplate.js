@@ -1,5 +1,6 @@
 let app = {
   props: ['db'],
+  components: {},
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {

@@ -6,8 +6,13 @@ dayjs.extend(relativeTime);
 var updateLocale = require('dayjs/plugin/updateLocale')
 dayjs.extend(updateLocale)
 
+import PanelHeadMetaFile from './PanelHeadMetaFile/PanelHeadMetaFile.vue'
+
 let app = {
   props: ['db', 'task'],
+  components: {
+    PanelHeadMetaFile
+  },
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {

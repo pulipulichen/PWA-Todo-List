@@ -1,13 +1,23 @@
 <div class="PanelFileItem row">
-  <div class="thumbnail column"
-    v-if="mimeIcon">
-    <img :src="fileSystemURL" v-if="isImage" />
-    <img :src="mimeIcon" v-else />
-  </div>
+  <a class="thumbnail column"
+    :href="fileSystemURL"
+    :title="file"
+    v-if="mimeIcon"
+    :style="{'background-image': thumbnail}"
+    @click.prevent.stop="clickThumbnail">
+  </a>
   <div class="filename column">
     <a :href="fileSystemURL"
       :title="file"
-      :download="file">
+      :download="file"
+      v-if="!isImage">
+      {{ file }}
+    </a>
+    <a :href="fileSystemURL"
+      :title="file"
+      :download="file"
+      @click.prevent.stop="clickThumbnail"
+      v-else>
       {{ file }}
     </a>
   </div>
@@ -30,13 +40,14 @@
       :href="fileSystemURL"
       taget="_blank"
       v-if="isImage"
-      @click.prevent.stop="db.utils.FileSystemUtils.popupPreview(filePath)">
+      @click.prevent.stop="popupPreview">
       <i class="open external icon" />
     </a>
     <a class="ui icon button"
       :title="file"
       :href="fileSystemURL"
-      :download="file">
+      :download="file"
+      ref="DownloadButton">
       <i class="download icon" />
     </a>
   </div>

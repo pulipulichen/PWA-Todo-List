@@ -4,22 +4,24 @@ import NavigationBar from './NavigationBar/NavigationBar.vue'
 import TaskList from './TaskList/TaskList.vue'
 import PanelFilter from './PanelFilter/PanelFilter.vue'
 import ViewConfiguration from './ViewConfiguration/ViewConfiguration.vue'
+import DropZone from './DropZone/DropZone.vue'
 
 // import browserFileStorage from 'browser-file-storage'
 
 let Index = {
   props: ['db', 'view', 'search'],
+  components: {
+    NavigationBar,
+    TaskList,
+    PanelFilter,
+    ViewConfiguration,
+    DropZone
+  },
   data() {
     this.$i18n.locale = this.db.config.localConfig
     return {
       viewList: ['todo', 'completed']
     }
-  },
-  components: {
-    NavigationBar,
-    TaskList,
-    PanelFilter,
-    ViewConfiguration
   },
   computed: {
     isInIframe () {
@@ -30,6 +32,12 @@ let Index = {
       } catch (e) {
         return true
       }
+    },
+    hasTodoTasks () {
+      return (this.db.localConfig.tasks.filter(t => !t.isCompleted).length > 0)
+    },
+    hasCompletedTasks () {
+      return (this.db.localConfig.tasks.filter(t => t.isCompleted).length > 0)
     }
   },
   watch: {
@@ -52,7 +60,7 @@ let Index = {
     },
     'db.config.search' () {
       this.pushRouter()
-    } 
+    },
   },
   mounted() {
     if (this.view) {
@@ -63,11 +71,22 @@ let Index = {
     }
 
     this.initFileSystem()
+    this.initTaskUtils()
   },
   methods: {
+
     pushRouter: async function () {
       this.db.config.showConfiguration = false
+      this.db.config.focusedTask = false
       await this.$router.replace(`/${this.db.config.view}/${this.db.config.search}`, () => {}, () => {})
+    },
+
+    initTaskUtils () {
+      this.db.task = {
+        buildTaskData: () => {
+          return this.buildTaskData()
+        }
+      }
     },
     buildTaskData () {
       let addTodoText = this.db.config.addTodoText

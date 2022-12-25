@@ -97,7 +97,7 @@ let app = {
         // console.log(this.db.localConfig.tasks.map(i => i.title))
       }
     },
-    deleteTask () {
+    deleteTask: async function () {
       let title = this.task.title.trim()
       if (title.length > 20) {
         title = title.substring(0, 20) + '...'
@@ -107,7 +107,9 @@ let app = {
       }
 
       let index = this.db.localConfig.tasks.indexOf(this.task)
-      this.$parent.$parent.cleanTask(this.task)
+      await this.db.utils.FileSystemUtils.remove(this.task.id)
+      // this.$parent.$parent.cleanTask(this.task)
+      
       this.db.localConfig.tasks.splice(index, 1)
     },
     searchMap () {
@@ -125,20 +127,24 @@ let app = {
       }
     },
     focusPriorityPanel: async function () {
-      this.db.config.focusedTask = this.task
-      while (!this.$refs.PanelPriority) {
-        await this.db.utils.AsyncUtils.sleep(100)
-      }
-      // await nextTick()
-      this.$refs.PanelPriority.focus()
+      // this.db.config.focusedTask = this.task
+      // while (!this.$refs.PanelPriority) {
+      //   await this.db.utils.AsyncUtils.sleep(100)
+      // }
+      // // await nextTick()
+      // this.$refs.PanelPriority.focus()
+
+      return this.focusRef('PanelPriority')
     },
     focusDescription: async function () {
-      this.db.config.focusedTask = this.task
-      while (!this.$refs.TextareaDescription) {
-        await this.db.utils.AsyncUtils.sleep(100)
-      }
-      // await nextTick()
-      this.$refs.TextareaDescription.focus()
+      // this.db.config.focusedTask = this.task
+      // while (!this.$refs.TextareaDescription) {
+      //   await this.db.utils.AsyncUtils.sleep(100)
+      // }
+      // // await nextTick()
+      // this.$refs.TextareaDescription.focus()
+
+      return this.focusRef('TextareaDescription')
     },
     checkCompletedListIsEmpty () {
       let list = this.db.localConfig.tasks.filter(tasks => tasks.isCompleted)
@@ -146,6 +152,19 @@ let app = {
       if (list.length === 0) {
         this.db.config.view = 'todo'
       }
+    },
+    focusRef: async function (ref) {
+      this.db.config.focusedTask = this.task
+      while (!this.$refs[ref]) {
+        await this.db.utils.AsyncUtils.sleep(100)
+      }
+      // await nextTick()
+      this.$refs[ref].$el.scrollIntoView({
+        behavior: 'smooth'
+      })
+    },
+    focusFilelist: async function () {
+      return this.focusRef('PanelFileList')
     }
   }
 }

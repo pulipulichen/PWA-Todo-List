@@ -1,4 +1,6 @@
 import PanelFileItem from './PanelFileItem/PanelFileItem.vue'
+import PanelFileUpload from './PanelFileUpload/PanelFileUpload.vue'
+import PanelFileSort from './PanelFileSort/PanelFileSort.vue'
 
 let app = {
   props: ['db', 'task'],
@@ -8,16 +10,21 @@ let app = {
     }
   },
   components: {
-    PanelFileItem
+    PanelFileItem,
+    PanelFileUpload,
+    PanelFileSort
   },
   watch: {
     'db.localConfig.locale'() {
       this.$i18n.locale = this.db.localConfig.locale;
     },
+    'task.files' () {
+      this.task.modifiedTime = (new Date()).getTime()
+    }
   },
   computed: {
     dirPath () {
-      return this.task.id 
+      return String(this.task.id)
     }
   },
   mounted() {
@@ -25,33 +32,19 @@ let app = {
   },
   methods: {
     removeFiles: async function () {
-      let list = await this.db.utils.FileSystemUtils.list(this.dirPath)
-      console.log(list)
-    },
-    openFile: async function (event) {
-      //console.log(1);
-      if (!window.FileReader) {
-        console.error(this.$t('Browser is not compatible'))
-        return false // Browser is not compatible
-      }
-  
-      //var reader = new FileReader();
-  
-      let file = event.target.files[0]
-      let filename = file.name
-      
-      // console.log({file, filename})
-      let filePath = this.task.id + '/' + filename
-      let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
-      console.log(url, filePath)
-
-      let urlFilename = url
-      if (urlFilename.lastIndexOf('/') > -1) {
-        urlFilename = urlFilename.slice(urlFilename.lastIndexOf('/') + 1)
+      if (!window.confirm(this.$t('Are you sure you want to remove all files'))) {
+        return false
       }
 
-      this.task.files.unshift(urlFilename)
+      // let list = await this.db.utils.FileSystemUtils.list(this.dirPath)
+      // // console.log(list)
+      // for (let i = 0; i < list.length; i++) {
+      //   await this.db.utils.FileSystemUtils.remove()
+      // }
+      await this.db.utils.FileSystemUtils.remove(this.dirPath)
+      this.task.files = this.task.files.slice(0,0)
     },
+    
   }
 }
 

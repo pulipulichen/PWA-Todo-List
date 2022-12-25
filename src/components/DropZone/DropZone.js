@@ -1,0 +1,127 @@
+let app = {
+  props: ['db'],
+  data () {    
+    this.$i18n.locale = this.db.localConfig.locale
+    return {
+      isDragging: false,
+      isDragFromWindow: false
+    }
+  },
+  watch: {
+    'db.localConfig.locale'() {
+      this.$i18n.locale = this.db.localConfig.locale;
+    },
+  },
+  computed: {
+    
+  },
+  mounted() {
+    this.initEvents()
+  },
+  methods: {
+    initEvents () {
+      window.addEventListener('dragstart', () => {
+        // console.log('dragstart')
+        this.isDragFromWindow = true
+      })
+
+      window.addEventListener('dragenter', () => {
+        // console.log('dragenter')
+        if (this.isDragFromWindow === false) {
+          this.isDragging = true
+        }
+      })
+
+      // window.addEventListener('mouseleave', () => {
+      //   console.log('mouseleave')
+      //   this.isDragging = false
+      // })
+
+      // window.addEventListener('dragleave', () => {
+      //   console.log('dragleave')
+      //   this.isDragging = false
+      // })
+
+      window.addEventListener('dragend', () => {
+        // console.log('dragend')
+        this.isDragFromWindow = false
+      })
+    },
+    dropHandler (ev) {
+      // console.log('File(s) dropped');
+
+  // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault();
+
+      let files = []
+      if (ev.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...ev.dataTransfer.items].forEach((item, i) => {
+          // If dropped items aren't files, reject them
+          if (item.kind === 'file') {
+            const file = item.getAsFile();
+            // console.log(`… file[${i}].name = ${file.name}`);
+            files.push(file)
+          }
+        });
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        [...ev.dataTransfer.files].forEach((file, i) => {
+          // console.log(`… file[${i}].name = ${file.name}`);
+          files.push(file)
+        });
+      }
+
+      this.processFiles(files)
+    },
+    processFiles: async function (files) {
+      if (files.length === 0) {
+        return false
+      }
+
+      let taskData = this.db.task.buildTaskData()
+
+      let filenames = []
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i]
+        let filename = file.name
+        
+        // ---------------------------------
+        // 建立task
+        
+        filenames.push(filename)
+
+        // ---------------------------------
+        //上傳檔案
+
+        // console.log({file, filename})
+        let filePath = taskData.id + '/' + filename
+        let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+        // console.log(url, filePath)
+
+        let urlFilename = this.db.utils.FileSystemUtils.basename(url)
+
+        taskData.files.unshift(urlFilename)
+      }
+
+      taskData.title = filenames.join(', ')
+
+      this.db.localConfig.tasks.unshift(taskData)
+      this.db.config.view = 'todo'
+      this.db.config.focusedTask = taskData
+    },
+    dragOverHandler(ev) {
+      // console.log('File(s) in drop zone');
+    
+      // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault();
+    },
+    dragLeaveHandler (ev) {
+      // console.log('dragLeaveHandler');
+      this.isDragging = false
+      ev.preventDefault();
+    }
+  }
+}
+
+export default app

@@ -3,18 +3,25 @@
     {{ displayDueTime }}
   </div>
 
+  <a :href="link" :title="link" target="_blank" 
+    v-if="link"
+    class="ui icon transparent basic button link-button meta-button">
+    <i class="linkify icon"></i>
+  </a>
+
+  <PanelHeadMetaFile 
+    ref="PanelHeadMetaFile"
+    :db="db"
+    :task="task">
+  </PanelHeadMetaFile>
+  
+
   <button type="button" class="ui icon transparent basic button meta-button"
     v-if="task.priority > 0"
     @click="focusPriorityPanel">
     <i class="flag icon"
       :class="{green: (task.priority === 1), yellow: (task.priority === 2), red: (task.priority === 3)}"></i>
   </button>
-
-  <a :href="link" :title="link" target="_blank" 
-    v-if="link"
-    class="ui icon transparent basic button link-button meta-button">
-    <i class="linkify icon"></i>
-  </a>
 
   <button type="button" class="ui icon transparent basic button meta-button"
     @click="setTask('isPinned', !task.isPinned)">

@@ -1,5 +1,5 @@
 let app = {
-  props: ['db'],
+  props: ['db', 'task'],
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {
@@ -11,11 +11,10 @@ let app = {
     'db.localConfig.locale'() {
       this.$i18n.locale = this.db.localConfig.locale;
     },
-    sortAction () {
+    sortAction: async function () {
       if (this.sortAction === '') {
         return false
       }
-      this.db.config.focusedTask = null
 
       let baseDir = -1
       if (this.lastSortAction === this.sortAction) {
@@ -23,7 +22,8 @@ let app = {
       }
 
       //console.log(this.sortAction)
-      this.db.localConfig.tasks.sort((a, b) => {
+      let files = await this.getFiles()
+      files.sort((a, b) => {
         if (a[this.sortAction] > b[this.sortAction]) {
           return baseDir
         }
@@ -44,27 +44,35 @@ let app = {
         this.lastSortAction = this.sortAction
       }
       this.sortAction = ''
+
+      let filenames = files.map(f => f.name)
+      this.task.files = this.task.files.slice(0,0).concat(filenames)
     }
   },
-  computed: {
+  // computed: {
     
-  },
-  mounted() {
+  // },
+  // mounted() {
     
-  },
+  // },
   methods: {
-    removeAllCompletedTasks () {
-      if (!window.confirm(this.$t('Are you sure you want to remove all completed tasks?'))) {
-        return false
+    getFiles: async function () {
+      let files = []
+
+      for (let i = 0; i < this.task.files.length; i++) {
+        let filename = this.task.files[i]
+        let filePath = this.task.id + '/' + filename
+
+        let metadata = await this.db.utils.FileSystemUtils.getFileMetadata(filePath)
+
+        files.push({
+          name: filename,
+          size: metadata.sizeNumber,
+          time: metadata.modificationTime
+        })
       }
 
-      this.db.localConfig.tasks = this.db.localConfig.tasks.filter(task => {
-        this.$parent.cleanTask(task)
-        return task.isCompleted
-      })
-    },
-    backupAllCompletedTasks () {
-      window.alert('@TODO backupAllCompletedTasks')
+      return files
     }
   }
 }
