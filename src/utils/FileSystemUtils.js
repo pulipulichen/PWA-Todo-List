@@ -1,3 +1,5 @@
+import mime from 'mime-types'
+
 let CONFIG = {
   quotaInMB: 5
 }
@@ -812,7 +814,9 @@ Message: ${e.message}`
       this.fs.root.getFile(path, {}, (fileEntry) => {
         fileEntry.getMetadata(({modificationTime, size}) => {
           size = this.humanFileSize(size)
-          resolve({modificationTime, size})
+          let fileMIME = mime.lookup(path)
+          let fileMIMEicon = fileMIME.replace(/\//g, '-')
+          resolve({modificationTime, size, mime: fileMIME, mimeIcon: fileMIMEicon})
         }, reject)
       })
     })
@@ -847,6 +851,103 @@ Message: ${e.message}`
 
 
     return bytes.toFixed(dp) + ' ' + units[u];
+  },
+  popupPreview: async function (path) {
+    while (!this.fs) {
+      await this.sleep(100)
+    }
+
+    path = this.parsePath(path)
+
+    let windowName = 'popup' + (new Date()).getTime()
+    let bodyHTML = `
+<div style="display: flex; align-items: center; justify-content: center; ">
+  <img src="${this.getFileSystemUrl(path)}" />
+</div>
+
+<style>
+body { padding: 0; height: 100vh; }
+</style>`
+    let title = this.getFileName(path)
+    let size = 'fullscreen' // 'fullscreen', 'left', 'right'
+    
+    let top = 0
+    let left = 0
+    let width = window.screen.availWidth
+    let height = window.screen.availHeight
+    
+    
+    if (size === 'left') {
+      width = parseInt(width / 2, 10)
+    }
+    else if (size === 'right') {
+      width = parseInt(width / 2, 10)
+      left = width
+    }
+    
+    let parameters = [
+      'toolbar=no',
+      'location=no',
+      'status=no',
+      'menubar=no',
+      'scrollbars=yes',
+      'resizable=yes',
+      'width=' + width,
+      'height=' + height,
+      'top=' + top,
+      'left=' + left
+    ]
+    //console.log(windowName)
+    let win = window.open('', windowName, parameters.join(','))
+    
+    // ------------------------------
+    
+    let isReady = false
+    
+    let doc = win.document
+    
+    if (bodyHTML) {
+      doc.body.innerHTML = bodyHTML
+      isReady = true
+    }
+    
+    if (title) {
+      doc.title = title
+    }
+    
+    win.setHTML = (html) => {
+      doc.body.innerHTML = html
+      isReady = true
+    }
+    
+    win.clearHTML = () => {
+      doc.body.innerHTML = ''
+    }
+    
+    win.setTitle = (title) => {
+      doc.title = title
+    }
+    
+    let waitReady = async () => {
+      while (isReady === false) {
+        await this.sleep()
+      }
+    }
+    
+    win.scrollToCenter = async () => {
+      //console.log('1')
+      await waitReady()
+      //console.log('2', win.document.body.scrollWidth, win.innerWidth)
+      let scrollLeft =  parseInt((win.document.body.scrollWidth - win.innerWidth) / 2, 10)
+      //console.log(scrollLeft)
+      win.scrollTo(scrollLeft, null)
+    }
+    
+    win.scrollToTop = async () => {
+      await waitReady()
+      win.scrollTo(null, 0)
+    }
+    return win
   }
 }
 

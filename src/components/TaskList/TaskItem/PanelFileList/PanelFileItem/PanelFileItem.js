@@ -4,7 +4,9 @@ let app = {
     this.$i18n.locale = this.db.localConfig.locale
     return {
       modificationTime: null,
-      size: null
+      size: null,
+      mime: null,
+      mimeIcon: null
     }
   },
   watch: {
@@ -21,6 +23,9 @@ let app = {
     },
     fileSystemURL () {
       return this.db.utils.FileSystemUtils.getFileSystemUrl(this.filePath)
+    },
+    isImage () {
+      return (this.mime && this.mime.startsWith('image/')) 
     }
   },
   mounted: async function () {
@@ -31,6 +36,8 @@ let app = {
       let metadata = await this.db.utils.FileSystemUtils.getFileMetadata(this.filePath)
       this.modificationTime = this.db.utils.DateUtils.format(metadata.modificationTime)
       this.size = metadata.size
+      this.mime = metadata.mime
+      this.mimeIcon = './assets/mimetypes-icons-scalable/' + metadata.mimeIcon + '.svg'
     },
     remove: async function () {
       // let path = this.$parent.getFileSystemLocalPath(this.file)

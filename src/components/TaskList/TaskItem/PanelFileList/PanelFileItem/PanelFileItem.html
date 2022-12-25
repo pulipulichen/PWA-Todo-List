@@ -1,6 +1,8 @@
 <div class="PanelFileItem row">
-  <div class="thumbnail column">
-    t
+  <div class="thumbnail column"
+    v-if="mimeIcon">
+    <img :src="fileSystemURL" v-if="isImage" />
+    <img :src="mimeIcon" v-else />
   </div>
   <div class="filename column">
     <a :href="fileSystemURL"
@@ -26,7 +28,9 @@
     <a class="ui icon button"
       :title="file"
       :href="fileSystemURL"
-      taget="_blank">
+      taget="_blank"
+      v-if="isImage"
+      @click.prevent.stop="db.utils.FileSystemUtils.popupPreview(filePath)">
       <i class="open external icon" />
     </a>
     <a class="ui icon button"
