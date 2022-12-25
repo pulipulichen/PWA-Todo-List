@@ -18,8 +18,11 @@ let app = {
   computed: {
     filteredTaskList () {
       if (Array.isArray(this.db.localConfig.tasks) === false) {
+        console.log('is not array')
         return []
       }
+
+      // console.log(this.db.localConfig.tasks)
 
       let list = this.db.localConfig.tasks.filter((task) => {
         // console.log(task, )

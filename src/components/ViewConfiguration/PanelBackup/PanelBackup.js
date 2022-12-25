@@ -14,6 +14,11 @@ let app = {
       ],
       arrayJSONAttributes: [
         'tasks'
+      ],
+      booleanFields: [
+        'dueTime',
+        'isCompleted', 
+        'isPinned'
       ]
     }
   },
@@ -35,23 +40,47 @@ let app = {
 
       // ---------------------
 
-      let configJSON = {
-        title: this.db.localConfig.title,
-        favicon: this.db.localConfig.favicon,
-      }
-
-      XLSX.utils.book_append_sheet(wb, this.buildAOAData(configJSON), 'configuration') // sheetAName is name of Worksheet
-
+      this.appendConfiguration(wb)
       // ------------------
 
-      let arrayJSON = this.db.localConfig.tasks
+      this.appendArrayJSON(wb, 'tasks')
+      // export Excel file
+      
+      // ------------------
+
+      let filename = this.db.config.appNameID + dayjs().format('MMDD-HHmm') + '.ods' 
+      
+      XLSX.writeFile(wb, filename, {type: 'file', bookType: 'ods', compression: true}) // name of the file is 'book.xlsx'
+    },
+    appendConfiguration (wb) {
+      
+      let configJSON = {}
+
+      Object.keys(this.db.localConfig).forEach(key => {
+        if (this.arrayJSONAttributes.indexOf(key) > -1) {
+          return false
+        }
+        configJSON[key] = this.db.localConfig[key]
+      })
+
+      XLSX.utils.book_append_sheet(wb, this.buildAOAData(configJSON), 'configuration') // sheetAName is name of Worksheet
+    },
+    appendArrayJSON (wb, field) {
+      let arrayJSON = this.db.localConfig[field]
 
       arrayJSON = arrayJSON.map(task => {
         for (let i = 0; i < this.timeFields.length; i++) {
-          if (!task[this.timeFields[i]]) {
-            continue
+          // if (!task[this.timeFields[i]]) {
+          //   continue
+          // }
+          let value = task[this.timeFields[i]]
+          console.log(value, typeof(value))
+          if (value !== false) {
+            task[this.timeFields[i]] = new Date(value).toUTCString()
           }
-          task[this.timeFields[i]] = new Date(task[this.timeFields[i]]).toUTCString()
+          else {
+            task[this.timeFields[i]] = ''
+          }
         }
         return task
       })
@@ -62,13 +91,8 @@ let app = {
 
       // add Worksheet to Workbook
       // Workbook contains one or more worksheets
-      XLSX.utils.book_append_sheet(wb, data, 'data') // sheetAName is name of Worksheet
+      XLSX.utils.book_append_sheet(wb, data, field) // sheetAName is name of Worksheet
       
-      // export Excel file
-      
-      let filename = this.db.config.appNameID + dayjs().format('MMDD-HHmm') + '.ods' 
-      
-      XLSX.writeFile(wb, filename, {type: 'file', bookType: 'ods', compression: true}) // name of the file is 'book.xlsx'
     },
     buildAOAData (json) {
       let aoa = Object.keys(json).map(key => {
@@ -80,9 +104,9 @@ let app = {
 
       return data
     },
-    restore () {
-      window.alert(this.$t('TODO'))
-    },
+    // restore () {
+    //   window.alert(this.$t('TODO'))
+    // },
     openFile: async function (event) {
       //console.log(1);
       if (!window.FileReader) {
@@ -97,16 +121,29 @@ let app = {
       
       // this.config.loadingProgress = 0
        
-      let rawData
+      let data
       // if (filename.endsWith('.csv')) {
       //   rawData = await this.loadFileCSV(file)
       // }
       if (filename.endsWith('.ods')) {
-        rawData = await this.loadFileODS(file)
+        data = await this.loadFileODS(file)
+      }
+      // console.log(data)
+      if (!data) {
+        return false
       }
       
       // await this.processRawData(rawData)
-      this.db.localConfig.tasks = 
+      // this.db.localConfig.tasks = 
+      this.arrayJSONAttributes.forEach(field => {
+        // console.log(field)
+        this.db.localConfig[field] = this.db.localConfig[field].splice(0,0).concat(data[field])
+        // console.log(this.db.localConfig[field])
+      })
+      Object.keys(data['configuration']).forEach(key => {
+        this.db.localConfig[key] = data['configuration'][key]
+      })
+      this.db.config.showConfiguration = false
   },
     loadURLODS: function (url) {
 
@@ -144,12 +181,35 @@ let app = {
       for (let i = 1; i < array.length; i++) {
         let o = {}
         key.forEach((k, j) => {
-          o[k] = array[i][j]
+          let value = array[i][j]
+          if (this.timeFields.indexOf(k) > -1) {
+            if (value !== 0) {
+              value = Date.parse(value)
+            }
+            else if (isNaN(value)) {
+              value = false
+            }
+          }
+          if (this.booleanFields.indexOf(k) > -1) {
+            console.log(k, value, typeof(value))
+            value = this.parseBoolean(value)
+            console.log(k, value, typeof(value))
+          }
+          o[k] = value
         })
 
         output.push(o)
       }
       return output
+    },
+    parseBoolean (value) {
+      if (isNaN(value)) {
+        value = false
+      }
+      else if (value !== 0 && value !== 1) {
+        return value
+      }
+      return (value === 1)
     },
     processXLSXData: async function (workbook) {
       
@@ -184,12 +244,25 @@ let app = {
 
         xlData = await this.db.utils.DataUtils.parseNumber(xlData)
 
-        if (name === 'tasks') {
-          xlData = this.arrayToJSON(xlData)
+        if (this.arrayJSONAttributes.indexOf(name) > -1) {
+          xlData = await this.arrayToJSON(xlData)
+        }
+        else {
+          xlData = this.parseConfigurationJSON(xlData)
         }
         output[name] = xlData
       }
         
+      return output
+    },
+    parseConfigurationJSON (xlData) {
+      let output = {}
+
+      for (let i = 0; i < xlData.length; i++) {
+        let row = xlData[i]
+        output[row[0]] = row[1]
+      }
+
       return output
     }
     
