@@ -97,8 +97,14 @@ let Index = {
     testFileSystem: async function () {
       let fs = this.db.utils.FileSystemUtils
       await fs.init()
-      await fs.createDir('test')
-      console.log('gogo')
+      // await fs.createDir('test')
+      let url = await fs.writeFromString('/tmp/ok.txt', 'okkk?')
+      // window.open(url, '_blank')
+      console.log('gogo', url)
+
+      await fs.remove('/tmp/ok.txt')
+
+      console.log('deleted', url)
     }
   }
 }

@@ -224,15 +224,15 @@ Message: ${e.message}`
 
         if (dirExists === false) {
           await this.createDir(dirPath)
-          await this.writeFromString(filePath, content)
-          return resolve()
+          let result = await this.writeFromString(filePath, content)
+          return resolve(result)
         }
         else {
-          let fileExists = await isExists(filePath)
+          let fileExists = await this.isExists(filePath)
           if (fileExists === true) {
             await this.remove(filePath)
-            await this.writeFromString(filePath, content)
-            return resolve()
+            let result = await this.writeFromString(filePath, content)
+            return resolve(result)
           }
           else {
             // this.errorHandler(e)
@@ -253,6 +253,7 @@ Message: ${e.message}`
           fileEntry.createWriter((fileWriter) => {
 
             fileWriter.onwriteend = (e) => {
+              filePath = this.getFileSystemUrl(filePath)
               console.log('Write completed: ' + filePath);
               //console.log(content)
               // triggerCallback(callback)
@@ -458,7 +459,7 @@ Message: ${e.message}`
       });
     })
   },
-  remove: function (path, callback) {
+  remove: function (path) {
     // if (InitHelper.ready === false) {
     if (!this.fs) {
       console.log('wait init ready')
@@ -546,7 +547,7 @@ Message: ${e.message}`
     path = decodeURIComponent(path)
     return path
   },
-  readEventFilesText: function (files, callback) {
+  readEventFilesText: function (files) {
     //console.log(typeof(files.name))
     let isArray = true
     if (typeof (files.name) === 'string') {
@@ -559,34 +560,40 @@ Message: ${e.message}`
     let i = 0
 
     let reader = new FileReader();
-    reader.onload = function (event) {
-      let result = event.target.result
-      output.push(result)
-      i++
-      loop(i)
-    };
 
-    let loop = (i) => {
-      if (i < files.length) {
-        let file = files[i]
-        //console.log(file);
-        //reader.readAsDataURL(file);
-        reader.readAsText(file)
-      }
-      else {
-        if (isArray === false) {
-          output = output[0]
+    return new Promise(async (resolve, reject) => {
+      reader.onload = function (event) {
+        let result = event.target.result
+        output.push(result)
+        i++
+        loop(i)
+      };
+
+      let loop = (i) => {
+        if (i < files.length) {
+          let file = files[i]
+          //console.log(file);
+          //reader.readAsDataURL(file);
+          reader.readAsText(file)
         }
-        triggerCallback(callback, output)
+        else {
+          if (isArray === false) {
+            output = output[0]
+          }
+          // triggerCallback(callback, output)
+          resolve(output)
+        }
       }
-    }
-    loop(i)
+      loop(i)
+    })
+
+      
   },
   stripAssetFileSystemPrefix: function (url) {
-    if (url === null
-      || typeof (url) !== 'string'
-      || !url.startsWith('filesystem:')
-      || url.lastIndexOf('/assets/') === -1) {
+    if (url === null || 
+      typeof (url) !== 'string' || 
+      !url.startsWith('filesystem:') || 
+      url.lastIndexOf('/assets/') === -1) {
       return url
     }
 
@@ -617,86 +624,99 @@ Message: ${e.message}`
     //console.log(['filterImageListToFileSystem url 2:', this.getFileSystemUrl(url)])
     return this.getFileSystemUrl(url)
   },
-  statsticQuotaUsage: function (callback) {
+  statsticQuotaUsage: function () {
     let storage = navigator.webkitTemporaryStorage
     if (this.type === window.PERSISTENT) {
       storage = navigator.webkitPersistentStorage
     }
 
-    storage.queryUsageAndQuota((quoteUsed, quotaTotal) => {
-      triggerCallback(callback, quoteUsed, quotaTotal)
+    return new Promise(async (resolve, reject) => {
+      storage.queryUsageAndQuota((quoteUsed, quotaTotal) => {
+        // triggerCallback(callback, quoteUsed, quotaTotal)
+        resolve({quoteUsed, quotaTotal})
+      })
     })
+      
   },
-  list: function (path, callback) {
+  _list: function (path) {
     let fs = this.fs
-    let errorHandler = (e) => {
-      if (e.code === 8) {
-        // Error code: 8
-        // Name: NotFoundError
-        // Message: A requested file or directory could not be found at the time an operation was processed.
-        console.log('list not found: ' + path)
-        triggerCallback(callback)
-      }
-      else {
-        this.errorHandler(e)
-      }
-    }
-    let fileList = []
-    /*
-    var dirReader = fs.root.createReader();
-    var entries = [];
 
-    // Call the reader.readEntries() until no more results are returned.
-    var readEntries = function() {
-       dirReader.readEntries (function(results) {
-        if (!results.length) {
-          listResults(entries.sort());
-        } else {
-          entries = entries.concat(toArray(results));
-          readEntries();
+    return new Promise(async (resolve, reject) => {
+      let errorHandler = (e) => {
+        if (e.code === 8) {
+          // Error code: 8
+          // Name: NotFoundError
+          // Message: A requested file or directory could not be found at the time an operation was processed.
+          // console.log('list not found: ' + path)
+          // triggerCallback(callback)
+          reject('list not found: ' + path)
         }
-      }, errorHandler);
-    };
-
-    readEntries(); // Start reading dirs.
-    */
-    fs.root.getDirectory(path, {}, function (dirEntry) {
-      var dirReader = dirEntry.createReader();
-      dirReader.readEntries(function (entries) {
-        for (var i = 0; i < entries.length; i++) {
-          var entry = entries[i];
-          if (entry.isFile) {
-            //console.log('File: ' + entry.fullPath);
-            fileList.push(entry.fullPath)
+        else {
+          // this.errorHandler(e)
+          reject(e)
+        }
+      }
+      let fileList = []
+      fs.root.getDirectory(path, {}, (dirEntry) => {
+        var dirReader = dirEntry.createReader()
+        dirReader.readEntries((entries) => {
+          for (var i = 0; i < entries.length; i++) {
+            var entry = entries[i]
+            if (entry.isFile) {
+              //console.log('File: ' + entry.fullPath);
+              fileList.push(entry.fullPath)
+            }
           }
+          // triggerCallback(callback, fileList)
+          return resolve(fileList)
+        }, errorHandler)
+      }, errorHandler)
+    })
+
+  },
+  get list() {
+    return this._list
+  },
+  set list(value) {
+    this._list = value
+  },
+  copy: function (oldPath, newPath) {
+    let fs = this.fs
+    oldPath = this.resolveFileSystemUrl(oldPath)
+    newPath = this.resolveFileSystemUrl(newPath)
+    let newPathDir = newPath.slice(0, newPath.lastIndexOf('/'))
+    let newName = newPath.slice(newPath.lastIndexOf('/') + 1)
+    //console.log(['read', filePath])
+    //let errorHandler = this.errorHandler
+
+    return new Promise(async (resolve, reject) => {
+      let errorHandler = (e) => {
+        if (e.code === 8) {
+          // Error code: 8
+          // Name: NotFoundError
+          // Message: A requested file or directory could not be found at the time an operation was processed.
+
+          //console.log('File not found: ' + filePath)
+          // triggerCallback(callback)
+          resolve()
         }
-        triggerCallback(callback, fileList)
+        else {
+          // this.errorHandler(e)
+          reject(e)
+        }
+      }
+      fs.root.getFile(oldPath, {}, (fileEntry) => {
+        // Get a File object representing the file,
+        // then use FileReader to read its contents.
+        fs.root.getDirectory(newPathDir, { create: true }, (dirEntry) => {
+          fileEntry.copyTo(dirEntry, newName, resolve, errorHandler)
+        })
+
       }, errorHandler);
-    }, errorHandler);
-  },
-  /*
-  filterSafeFilename: function (filename) {
-    if (filename.indexOf('+') > -1) {
-      filename = filename.split('+').join('_')
-    }
-    return filename
-  }
-  */
-  /*
-  copy: function (oldPath, newPath, callback) {
-    console.log(oldPath)
-    return this.read(oldPath, (fileContent) => {
-      console.log(newPath)
-      this.writeFromString(newPath, fileContent, callback)
     })
   },
-  move: function (oldPath, newPath, callback) {
-    return this.copy(oldPath, newPath, () => {
-      this.remove(oldPath, callback)
-    })
-  }
-  */
-  copy: function (oldPath, newPath, callback) {
+
+  move: function (oldPath, newPath) {
     let fs = this.fs
     oldPath = this.resolveFileSystemUrl(oldPath)
     newPath = this.resolveFileSystemUrl(newPath)
@@ -704,58 +724,32 @@ Message: ${e.message}`
     let newName = newPath.slice(newPath.lastIndexOf('/') + 1)
     //console.log(['read', filePath])
     //let errorHandler = this.errorHandler
-    let errorHandler = (e) => {
-      if (e.code === 8) {
-        // Error code: 8
-        // Name: NotFoundError
-        // Message: A requested file or directory could not be found at the time an operation was processed.
 
-        //console.log('File not found: ' + filePath)
-        triggerCallback(callback)
+    return new Promise(async (resolve, reject) => {
+      let errorHandler = (e) => {
+        if (e.code === 8) {
+          // Error code: 8
+          // Name: NotFoundError
+          // Message: A requested file or directory could not be found at the time an operation was processed.
+
+          //console.log('File not found: ' + filePath)
+          return resolve()
+        }
+        else {
+          // this.errorHandler(e)
+          return reject(e)
+        }
       }
-      else {
-        this.errorHandler(e)
-      }
-    }
-    fs.root.getFile(oldPath, {}, (fileEntry) => {
-      // Get a File object representing the file,
-      // then use FileReader to read its contents.
-      fs.root.getDirectory(newPathDir, { create: true }, (dirEntry) => {
-        fileEntry.copyTo(dirEntry, newName, callback, errorHandler)
-      })
+      fs.root.getFile(oldPath, {}, (fileEntry) => {
+        // Get a File object representing the file,
+        // then use FileReader to read its contents.
+        fs.root.getDirectory(newPathDir, { create: true }, (dirEntry) => {
+          fileEntry.moveTo(dirEntry, newName, resolve, errorHandler)
+        })
 
-    }, errorHandler);
-  },
-
-  move: function (oldPath, newPath, callback) {
-    let fs = this.fs
-    oldPath = this.resolveFileSystemUrl(oldPath)
-    newPath = this.resolveFileSystemUrl(newPath)
-    let newPathDir = newPath.slice(0, newPath.lastIndexOf('/'))
-    let newName = newPath.slice(newPath.lastIndexOf('/') + 1)
-    //console.log(['read', filePath])
-    //let errorHandler = this.errorHandler
-    let errorHandler = (e) => {
-      if (e.code === 8) {
-        // Error code: 8
-        // Name: NotFoundError
-        // Message: A requested file or directory could not be found at the time an operation was processed.
-
-        //console.log('File not found: ' + filePath)
-        triggerCallback(callback)
-      }
-      else {
-        this.errorHandler(e)
-      }
-    }
-    fs.root.getFile(oldPath, {}, (fileEntry) => {
-      // Get a File object representing the file,
-      // then use FileReader to read its contents.
-      fs.root.getDirectory(newPathDir, { create: true }, (dirEntry) => {
-        fileEntry.moveTo(dirEntry, newName, callback, errorHandler)
-      })
-
-    }, errorHandler);
+      }, errorHandler);
+    })
+      
   }
 }
 
