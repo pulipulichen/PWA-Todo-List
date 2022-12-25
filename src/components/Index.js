@@ -1,21 +1,21 @@
 /* global Node */
 //import $ from 'jquery'
-import NavigationBar from './NavigationBar/NavigationBar.vue'
-import TaskList from './TaskList/TaskList.vue'
-import PanelFilter from './PanelFilter/PanelFilter.vue'
-import ViewConfiguration from './ViewConfiguration/ViewConfiguration.vue'
-import DropZone from './DropZone/DropZone.vue'
+// import NavigationBar from './NavigationBar/NavigationBar.vue'
+// import TaskList from './TaskList/TaskList.vue'
+// import PanelFilter from './PanelFilter/PanelFilter.vue'
+// import ViewConfiguration from './ViewConfiguration/ViewConfiguration.vue'
+// import DropZone from './DropZone/DropZone.vue'
 
 // import browserFileStorage from 'browser-file-storage'
 
 let Index = {
   props: ['db', 'view', 'search'],
   components: {
-    NavigationBar,
-    TaskList,
-    PanelFilter,
-    ViewConfiguration,
-    DropZone
+    NavigationBar: () => import(/* webpackChunkName: "components/NavigationBar" */ './NavigationBar/NavigationBar.vue'),
+    TaskList: () => import(/* webpackChunkName: "components/TaskList" */ './TaskList/TaskList.vue'),
+    PanelFilter: () => import(/* webpackChunkName: "components/PanelFilter" */ './PanelFilter/PanelFilter.vue'),
+    ViewConfiguration: () => import(/* webpackChunkName: "components/ViewConfiguration" */ './ViewConfiguration/ViewConfiguration.vue'),
+    DropZone: () => import(/* webpackChunkName: "components/DropZone" */ './DropZone/DropZone.vue')
   },
   data() {
     this.$i18n.locale = this.db.config.localConfig

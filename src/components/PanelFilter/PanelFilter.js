@@ -47,7 +47,17 @@ let app = {
     }
   },
   computed: {
-    
+    isShowPanel () {
+      let view = this.db.config.view
+
+      return ((view === 'todo' && this.hasTodoTasks) || (view === 'completed' && this.hasCompletedTasks))
+    },
+    hasTodoTasks () {
+      return (this.db.localConfig.tasks.filter(t => !t.isCompleted).length > 0)
+    },
+    hasCompletedTasks () {
+      return (this.db.localConfig.tasks.filter(t => t.isCompleted).length > 0)
+    }
   },
   mounted() {
     

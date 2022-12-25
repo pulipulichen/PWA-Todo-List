@@ -1,4 +1,5 @@
-<div class="PanelFilter ui form">
+<div class="PanelFilter ui form"
+  v-if="isShowPanel">
   <template v-if="db.config.view === 'completed'">
     <button type="button"   
       @click="backupAllCompletedTasks"

@@ -36,7 +36,7 @@
           <img src="./list-todo.png" />
         </a>
         <a class="item view-toggle"
-        :class="{disabled: !hasCompletedTasks}"
+          :class="{disabled: !hasCompletedTasks}"
           @click="db.config.view = 'completed'"
           v-if="db.config.view === 'todo'">
           <img src="./list-complated.png" />
