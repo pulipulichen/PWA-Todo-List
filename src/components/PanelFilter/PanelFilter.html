@@ -1,4 +1,8 @@
 <div class="PanelFilter ui form">
+  <button type="button" 
+    v-if="db.config.view === 'completed'"
+    @click="removeAllCompletedTasks"
+    class="ui warning button">{{ $t('DELETE ALL COMPLETED') }}</button>
   <div class="ui icon input">
     <i class="search icon"></i>
     <input type="text" 

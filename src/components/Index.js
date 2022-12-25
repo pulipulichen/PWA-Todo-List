@@ -5,6 +5,8 @@ import TaskList from './TaskList/TaskList.vue'
 import PanelFilter from './PanelFilter/PanelFilter.vue'
 import ViewConfiguration from './ViewConfiguration/ViewConfiguration.vue'
 
+// import browserFileStorage from 'browser-file-storage'
+
 let Index = {
   props: ['db', 'view', 'search'],
   data() {
@@ -59,9 +61,12 @@ let Index = {
     if (this.search) {
       this.db.config.search = this.search
     }
+
+    this.testFileSystem()
   },
   methods: {
     pushRouter: async function () {
+      this.db.config.showConfiguration = false
       await this.$router.replace(`/${this.db.config.view}/${this.db.config.search}`, () => {}, () => {})
     },
     buildTaskData () {
@@ -69,7 +74,8 @@ let Index = {
       this.db.config.addTodoText = ''
 
       let time = (new Date()).getTime()
-      return {
+      let task = {
+        id: this.db.localConfig.taskCount,
         title: addTodoText,
         description: ``,
         location: ``,
@@ -80,6 +86,19 @@ let Index = {
         createTime: time,
         modifiedTime: time,
       }
+
+      this.db.localConfig.taskCount++
+
+      return task
+    },
+    cleanTask (task) {
+      console.log('@TODO cleanTask')
+    },
+    testFileSystem: async function () {
+      let fs = this.db.utils.FileSystemUtils
+      await fs.init()
+      await fs.createDir('test')
+      console.log('gogo')
     }
   }
 }

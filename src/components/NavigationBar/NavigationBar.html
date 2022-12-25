@@ -39,7 +39,8 @@
       <a class="item"
         :class="{actvie: db.config.showConfiguration}"
         @click="db.config.showConfiguration = !db.config.showConfiguration">
-        <i class="cog icon"></i>
+        <i class="icon"
+          :class="{cog: !db.config.showConfiguration, x: db.config.showConfiguration}"></i>
       </a>
     </div>
   </div>

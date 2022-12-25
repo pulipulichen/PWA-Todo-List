@@ -53,7 +53,16 @@ let app = {
     
   },
   methods: {
-    
+    removeAllCompletedTasks () {
+      if (!window.confirm(this.$t('Are you sure you want to remove all completed tasks?'))) {
+        return false
+      }
+
+      this.db.localConfig.tasks = this.db.localConfig.tasks.filter(task => {
+        this.$parent.cleanTask(task)
+        return task.isCompleted
+      })
+    }
   }
 }
 

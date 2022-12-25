@@ -105,6 +105,7 @@ let app = {
       }
 
       let index = this.db.localConfig.tasks.indexOf(this.task)
+      this.$parent.$parent.cleanTask(this.task)
       this.db.localConfig.tasks.splice(index, 1)
     },
     searchMap () {

@@ -63,8 +63,7 @@
     "vue-style-loader": "4.1.2",
     "vue-template-compiler": "2.6.10",
     "webpack": "4.39.2",
-    "webpack-cli": "3.3.9",
-    "xlsx": "0.16.9"
+    "webpack-cli": "3.3.9"
   },
   "dependencies": {
     "@handsontable/vue": "6.0.0",
@@ -81,6 +80,8 @@
     "toastr2": "3.0.0-alpha.15",
     "vuedraggable": "2.24.2",
     "webpack-bundle-analyzer": "3.9.0",
-    "xmlhttprequest": "1.8.0"
+    "xmlhttprequest": "1.8.0",
+    "browser-file-storage": "1.0.7",
+    "xlsx": "0.16.9"
   }
 }
