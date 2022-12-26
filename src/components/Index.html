@@ -30,6 +30,11 @@
       :db="db">
     </TaskList>
 
+    <EmptyListMessage
+      v-if="!hasTasks" 
+      ref="EmptyListMessage"
+      :db="db">
+    </EmptyListMessage>
   </div>
 
   <ViewConfiguration 

@@ -26,17 +26,8 @@ let app = {
   
       //var reader = new FileReader();
   
-      let file = event.target.files[0]
-      let filename = file.name
-      
-      // console.log({file, filename})
-      let filePath = this.task.id + '/' + filename
-      let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
-      // console.log(url, filePath)
-
-      let urlFilename = this.db.utils.FileSystemUtils.basename(url)
-
-      this.task.files.unshift(urlFilename)
+      let files = event.target.files
+      this.db.task.addFilesToTask(this.task, files)
     },
   }
 }

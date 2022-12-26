@@ -72,43 +72,7 @@ let app = {
         });
       }
 
-      this.processFiles(files)
-    },
-    processFiles: async function (files) {
-      if (files.length === 0) {
-        return false
-      }
-
-      let taskData = this.db.task.buildTaskData()
-
-      let filenames = []
-      for (let i = 0; i < files.length; i++) {
-        let file = files[i]
-        let filename = file.name
-        
-        // ---------------------------------
-        // 建立task
-        
-        filenames.push(filename)
-
-        // ---------------------------------
-        //上傳檔案
-
-        // console.log({file, filename})
-        let filePath = taskData.id + '/' + filename
-        let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
-        // console.log(url, filePath)
-
-        let urlFilename = this.db.utils.FileSystemUtils.basename(url)
-
-        taskData.files.unshift(urlFilename)
-      }
-
-      taskData.title = filenames.join(', ')
-
-      this.db.localConfig.tasks.unshift(taskData)
-      this.db.config.view = 'todo'
-      this.db.config.focusedTask = taskData
+      this.db.task.addTaskByFiles(files)
     },
     dragOverHandler(ev) {
       // console.log('File(s) in drop zone');

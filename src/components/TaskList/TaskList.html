@@ -1,7 +1,13 @@
 <div class="TaskList">
   <TaskItem 
-    v-for="task in filteredTaskList"
-    ref="TaskItem"
+    v-for="task in db.localConfig.tasks"
+    v-if="task.isPinned && showTask(task)"
+    :db="db"
+    :task="task">
+  </TaskItem>
+  <TaskItem 
+    v-for="task in db.localConfig.tasks"
+    v-if="!task.isPinned && showTask(task)"
     :db="db"
     :task="task">
   </TaskItem>

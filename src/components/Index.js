@@ -15,7 +15,8 @@ let Index = {
     TaskList: () => import(/* webpackChunkName: "components/TaskList" */ './TaskList/TaskList.vue'),
     PanelFilter: () => import(/* webpackChunkName: "components/PanelFilter" */ './PanelFilter/PanelFilter.vue'),
     ViewConfiguration: () => import(/* webpackChunkName: "components/ViewConfiguration" */ './ViewConfiguration/ViewConfiguration.vue'),
-    DropZone: () => import(/* webpackChunkName: "components/DropZone" */ './DropZone/DropZone.vue')
+    DropZone: () => import(/* webpackChunkName: "components/DropZone" */ './DropZone/DropZone.vue'),
+    EmptyListMessage: () => import(/* webpackChunkName: "components/EmptyListMessage" */ './EmptyListMessage/EmptyListMessage.vue')
   },
   data() {
     this.$i18n.locale = this.db.config.localConfig
@@ -38,6 +39,14 @@ let Index = {
     },
     hasCompletedTasks () {
       return (this.db.localConfig.tasks.filter(t => t.isCompleted).length > 0)
+    },
+    hasTasks () {
+      if (this.db.config.view === 'todo') {
+        return this.hasTodoTasks
+      }
+      else if (this.db.config.view === 'completed') {
+        return this.hasCompletedTasks
+      }
     }
   },
   watch: {
@@ -85,7 +94,64 @@ let Index = {
       this.db.task = {
         buildTaskData: () => {
           return this.buildTaskData()
+        },
+        addTaskByFiles: (files) => {
+          this.addTaskByFiles(files)
+        },
+        addFilesToTask: (task, files) => {
+          this.addFilesToTask(task, files)
         }
+      }
+    },
+    addTaskByFiles: async function (files) {
+      if (files.length === 0) {
+        return false
+      }
+
+      let taskData = this.buildTaskData()
+
+      let filenames = []
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i]
+        let filename = file.name
+        
+        // ---------------------------------
+        // 建立task
+        
+        filenames.push(filename)
+
+        // ---------------------------------
+        //上傳檔案
+
+        // console.log({file, filename})
+        let filePath = taskData.id + '/' + filename
+        let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+        // console.log(url, filePath)
+
+        let urlFilename = this.db.utils.FileSystemUtils.basename(url)
+
+        taskData.files.unshift(urlFilename)
+      }
+
+      taskData.title = filenames.join(', ')
+
+      this.db.localConfig.tasks.unshift(taskData)
+      this.db.config.view = 'todo'
+      this.db.config.focusedTask = taskData
+    },
+    addFilesToTask: async function (task, files) {
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i]
+        let filename = file.name
+        
+        // console.log({file, filename})
+        let filePath = task.id + '/' + filename
+        let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+        // console.log(url, filePath)
+
+        let urlFilename = this.db.utils.FileSystemUtils.basename(url)
+
+        task.files.unshift(urlFilename)
       }
     },
     buildTaskData () {

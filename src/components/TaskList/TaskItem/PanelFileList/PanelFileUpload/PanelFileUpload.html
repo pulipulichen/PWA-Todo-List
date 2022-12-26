@@ -2,5 +2,5 @@
   class="ui icon button PanelFileUpload" 
   @click="$refs.FileInput.click()">
   <i class="upload icon" />
-  <input type="file" ref="FileInput" v-on:change="openFile" />
+  <input type="file" ref="FileInput" v-on:change="openFile" multiple />
 </button>

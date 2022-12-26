@@ -2,6 +2,9 @@ import TaskItem from './TaskItem/TaskItem.vue'
 
 let app = {
   props: ['db'],
+  components: {
+    TaskItem,
+  },
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {
@@ -11,9 +14,6 @@ let app = {
     'db.localConfig.locale'() {
       this.$i18n.locale = this.db.localConfig.locale;
     },
-  },
-  components: {
-    TaskItem
   },
   computed: {
     filteredTaskList () {
@@ -59,7 +59,11 @@ let app = {
     // this.testFocusFirst ()
   },
   methods: {
-    
+    showTask (task) {
+      let view = this.db.config.view
+      // console.log(view, task.isCompleted)
+      return ((view === 'todo' && !task.isCompleted) || (view === 'completed' && task.isCompleted))
+    }
   }
 }
 
