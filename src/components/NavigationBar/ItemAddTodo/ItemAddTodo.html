@@ -1,0 +1,16 @@
+<div class="item add-todo ItemAddTodo" 
+  @click="focusAddTodoInput">
+  <div class="ui transparent left icon input"
+    :class="{transparent: (db.config.view === 'todo')}"
+    v-if="db.config.view === 'todo' || db.config.view === 'completed'">
+    <i class="plus link icon"
+      :class="{'disabled': !canAddTodo}"
+      @click="addTodo"></i>
+    <input type="text"
+      v-model="db.config.addTodoText"
+      :placeholder="$t(`What's todo...`)"
+      @keyup.enter.exact="addTodo"
+      ref="AddTodoInput"
+      />
+  </div>
+</div>

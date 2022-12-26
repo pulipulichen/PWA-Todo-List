@@ -1,6 +1,8 @@
 let app = {
   props: ['db'],
-  components: {},
+  components: {
+    // DataTaskManager: () => import(/* webpackChunkName: "components/DataTaskManager" */ './DataTaskManager/DataTaskManager.vue')
+  },
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {

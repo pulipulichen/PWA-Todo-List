@@ -1,9 +1,13 @@
 import TaskItem from './TaskItem/TaskItem.vue'
 
+// https://github.com/SortableJS/Vue.Draggable#typical-use
+import draggable from 'vuedraggable'
+
 let app = {
   props: ['db'],
   components: {
     TaskItem,
+    draggable
   },
   data () {    
     this.$i18n.locale = this.db.localConfig.locale

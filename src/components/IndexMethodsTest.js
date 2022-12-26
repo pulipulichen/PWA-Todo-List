@@ -1,7 +1,8 @@
-//import MLR from "ml-regression-multivariate-linear"
+// Convertor
+// https://docs.google.com/spreadsheets/d/1Dt-nmoDnIny1MPqQ_4Za8CV0OpCBal4dnHxsBkbpEp4/edit?usp=sharing
 
-export default function (Index) {
-//  Index.methods.testRegression = function () {
+export default function (app) {
+//  app.methods.testRegression = function () {
 //    
 //    const x = [
 //      [0, 0, 5],
@@ -21,6 +22,6 @@ export default function (Index) {
 //    console.log(mlr)
 //    // [6, 6, 6]
 //
-//  } // Index.methods.testRegression = function () {
+//  } // app.methods.testRegression = function () {
 
 }

@@ -38,9 +38,21 @@
   </div>
 
   <ViewConfiguration 
-    v-if="db.config.showConfiguration"
+    v-show="db.config.showConfiguration"
     ref="ViewConfiguration"
     :db="db">
   </ViewConfiguration>
+
+  <!-- =============================== -->
+
+  <DataManager 
+    ref="DataManager"
+    :db="db">
+  </DataManager>
+
+  <DataTaskManager 
+    ref="DataTaskManager"
+    :db="db">
+  </DataTaskManager>
 
 </div>

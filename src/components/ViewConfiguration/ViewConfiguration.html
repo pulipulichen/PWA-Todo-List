@@ -25,6 +25,23 @@
         </div>
       </div>
       <div class="field">
+        <label for="theme">{{ $t('Theme') }}</label>
+        <select v-model="db.localConfig.theme"
+          id="theme">
+          <option v-for="item in themeList"
+            :value="item">{{ $t(item) }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="background">{{ $t('background') }}</label>
+        <div class="ui input"
+          :class="{icon: (db.localConfig.backgroundImage.trim() !== '')}">
+          <input id="background" type="url" v-model="db.localConfig.backgroundImage" />
+          <i class="x link icon" @click="db.localConfig.backgroundImage = ''"
+            v-if="db.localConfig.backgroundImage.trim() !== ''" />
+        </div>
+      </div>
+      <div class="field">
         <PanelBackup 
           ref="PanelBackup"
           :db="db">

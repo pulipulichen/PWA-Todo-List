@@ -1,11 +1,18 @@
 import Author from './Author/Author.vue'
-import PanelBackup from './PanelBackup/PanelBackup.vue'
+// import PanelBackup from './PanelBackup/PanelBackup.vue'
 
 let app = {
   props: ['db'],
+  components: {
+    Author,
+    PanelBackup: () => import(/* webpackChunkName: "components/PanelBackup" */ './PanelBackup/PanelBackup.vue')
+  },
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {
+      themeList: [
+        'default'
+      ]
     }
   },
   watch: {
@@ -13,18 +20,18 @@ let app = {
       this.$i18n.locale = this.db.localConfig.locale;
     },
   },
-  components: {
-    Author,
-    PanelBackup
-  },
-  computed: {
+  // computed: {
     
-  },
+  // },
   mounted() {
-    
+    this.testViewConfiguration()
   },
   methods: {
-    
+    testViewConfiguration () {
+      setTimeout(() => {
+        this.db.config.showConfiguration = true
+      }, 1000)
+    }
   }
 }
 

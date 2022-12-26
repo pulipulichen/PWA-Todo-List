@@ -1,7 +1,12 @@
 import ItemFileUpload from './ItemFileUpload/ItemFileUpload.vue'
+import ItemAddTodo from './ItemAddTodo/ItemAddTodo.vue'
 
 let app = {
   props: ['db'],
+  components: {
+    ItemFileUpload,
+    ItemAddTodo
+  },
   data () {    
     this.$i18n.locale = this.db.localConfig.locale
     return {
@@ -12,13 +17,8 @@ let app = {
       this.$i18n.locale = this.db.localConfig.locale;
     },
   },
-  components: {
-    ItemFileUpload
-  },
   computed: {
-    canAddTodo () {
-      return (this.db.config.addTodoText.trim() !== '')
-    },
+    
     computedTitle () {
       let title = this.db.localConfig.title.trim()
       if (title === '') {
@@ -44,15 +44,7 @@ let app = {
     
   },
   methods: {
-    addTodo () {
-      if (this.canAddTodo === false) {
-        return false
-      }
-
-      let taskData = this.$parent.buildTaskData()
-      this.db.localConfig.tasks.unshift(taskData)
-      this.db.config.view = 'todo'
-    }
+    
   }
 }
 

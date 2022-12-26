@@ -2,6 +2,8 @@ let localConfig = {
   taskCount: 0,
   title: '',
   favicon: '',
+  backgroundImage: '',
+  theme: 'default',
   tasks: []
 }
 

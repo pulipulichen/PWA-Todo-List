@@ -1,14 +1,23 @@
 <div class="TaskList">
-  <TaskItem 
-    v-for="task in db.localConfig.tasks"
-    v-if="task.isPinned && showTask(task)"
-    :db="db"
-    :task="task">
-  </TaskItem>
-  <TaskItem 
-    v-for="task in db.localConfig.tasks"
-    v-if="!task.isPinned && showTask(task)"
-    :db="db"
-    :task="task">
-  </TaskItem>
+  
+  <draggable v-model="db.localConfig.tasks" group="pinned"
+    class="ui vertical segment draggable">
+    <TaskItem 
+      v-for="task in db.localConfig.tasks"
+      v-if="task.isPinned && showTask(task)"
+      :db="db"
+      :task="task">
+    </TaskItem>
+  </draggable>
+
+  <draggable v-model="db.localConfig.tasks" group="non_pinned"
+    class="ui vertical segment draggable">
+    <TaskItem 
+      v-for="task in db.localConfig.tasks"
+      v-if="!task.isPinned && showTask(task)"
+      :db="db"
+      :task="task">
+    </TaskItem>
+  </draggable>
+    
 </div>
