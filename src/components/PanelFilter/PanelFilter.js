@@ -74,7 +74,11 @@ let app = {
       })
     },
     backupAllCompletedTasks () {
-      window.alert('@TODO backupAllCompletedTasks')
+      if (!window.confirm(this.$t('Are you sure you want to backup and remove all completed tasks?'))) {
+        return false
+      }
+
+      this.db.data.backupCompleted()
     }
   }
 }

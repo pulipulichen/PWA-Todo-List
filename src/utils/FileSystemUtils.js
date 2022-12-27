@@ -324,10 +324,11 @@ Message: ${e.message}`
 
     return output
   },
-  read: function (filePath, callback) {
+  read: function (filePath) {
     let fs = this.fs
     filePath = this.resolveFileSystemUrl(filePath)
-    //console.log(['read', filePath])
+    filePath = this.parsePath(filePath)
+    // console.log(['read', filePath])
     //let errorHandler = this.errorHandler
     return new Promise((resolve, reject) => {
 
@@ -374,7 +375,12 @@ Message: ${e.message}`
 
       }, errorHandler);
     })
-
+  },
+  readBase64: async function (filePath) {
+    let uri = await this.read(filePath)
+    let idx = uri.indexOf('base64,') + 'base64,'.length
+    let base64 = uri.substring(idx)
+    return base64
   },
   writeFromFile: function (dirPath, files, filename) {
     // if (InitHelper.ready === false) {

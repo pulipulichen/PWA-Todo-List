@@ -21,6 +21,12 @@ let app = {
     
   },
   methods: {
+    reset () {
+      if (!window.confirm(this.$t('Are you sure you want to reset?'))) {
+        return false
+      }
+      this.db.data.reset()
+    },
     backup () {
       this.db.data.backup()
     },
@@ -29,6 +35,9 @@ let app = {
     //   window.alert(this.$t('TODO'))
     // },
     openFile: async function (event) {
+      if (!window.confirm(this.$t('Are you sure you want to restore?'))) {
+        return false
+      }
       this.db.data.restore(event)
     },
     

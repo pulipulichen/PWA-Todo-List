@@ -30,11 +30,12 @@ let app = {
       this.$i18n.locale = this.db.localConfig.locale;
     },
   },
-  computed: {
-    
-  },
+  // computed: {
+  // },
   mounted() {
     this.initData()
+
+    // this.testBackup20221227()
   },
   methods: {
     initData () {
@@ -42,15 +43,28 @@ let app = {
         backup: () => {
           this.backup()
         },
+        backupCompleted: () => {
+          this.backupCompleted()
+        },
         restore: (file) => {
           this.restore(file)
+        },
+        reset: () => {
+          this.reset()
         }
       }
-
+    },
+    reset () {
+      // console.log('reset')
+      this.arrayJSONAttributes.forEach(field => {
+        this.db.localConfig[field] = this.db.localConfig[field].slice(0,0)
+        // console.log(this.db.localConfig[field])
+      })
+      this.db.config.view = 'todo'
+      this.db.config.showConfigurations = false
     }
   }
 }
-
 
 import DataManagerMethodsRemote from './DataManagerMethodsRemote.js'
 DataManagerMethodsRemote(app)

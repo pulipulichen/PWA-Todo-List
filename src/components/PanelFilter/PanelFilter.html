@@ -3,10 +3,18 @@
   <template v-if="db.config.view === 'completed'">
     <button type="button"   
       @click="backupAllCompletedTasks"
-      class="ui warning button">{{ $t('BACKUP ALL COMPLETED') }}</button>
+      :title="$t('BACKUP ALL COMPLETED')"
+      class="ui icon warning button">
+      <!-- {{ $t('BACKUP ALL COMPLETED') }}-->
+      <i class="download icon" />
+    </button>
     <button type="button" 
       @click="removeAllCompletedTasks"
-      class="ui warning button">{{ $t('DELETE ALL COMPLETED') }}</button>
+      :title="$t('DELETE ALL COMPLETED')"
+      class="ui icon warning button">
+      <!-- {{ $t('DELETE ALL COMPLETED') }} -->
+      <i class="trash icon" />
+    </button>
   </template>
     
   <div class="ui icon input">

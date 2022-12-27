@@ -60,7 +60,7 @@ export default function (app) {
       return task
     })
 
-    console.log(arrayJSON)
+    // console.log(arrayJSON)
 
     // export json to Worksheet of Excel
     // only array possible
