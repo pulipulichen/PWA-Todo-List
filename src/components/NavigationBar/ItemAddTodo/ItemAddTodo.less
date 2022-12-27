@@ -1,13 +1,19 @@
-.fixed.menu .item.ItemAddTodo.add-todo {
-  width: calc(100% - 17rem) !important;
-  cursor: pointer;
-  // width: 100% !important;
-
-  .icon.disabled {
-    visibility: hidden !important;
+.fixed.menu {
+  .item.ItemAddTodo.add-todo {
+    width: calc(100% - 17rem) !important;
+    cursor: pointer;
+    // width: 100% !important;
+  
+    .icon.disabled {
+      visibility: hidden !important;
+    }
+  
+    &:before {
+      background: transparent !important;
+    }
   }
 
-  &:before {
-    background: transparent !important;
+  &.inverted .item.ItemAddTodo.add-todo {
+    background-color: rgba(255,255,255,0.7);
   }
 }

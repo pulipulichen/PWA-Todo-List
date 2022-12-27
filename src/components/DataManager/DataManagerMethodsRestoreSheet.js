@@ -2,32 +2,6 @@ import XLSX from 'xlsx'
 
 export default function (app) {
 
-  app.methods.arrayToJSON = async function (array) {
-    let key = array[0]
-    let output = []
-    for (let i = 1; i < array.length; i++) {
-      let o = {}
-      key.forEach((k, j) => {
-        let value = array[i][j]
-        
-        if (this.timeFields.indexOf(k) > -1) {
-          value = restoreTimeField(value)
-        }
-        if (this.booleanFields.indexOf(k) > -1) {
-          value = this.restoreBooleanField(value)
-        }
-        if (this.arrayFields.indexOf(k) > -1) {
-          value = this.restoreArrayField(value)
-        }
-
-        o[k] = value
-      })
-
-      output.push(o)
-    }
-    return output
-  }
-
   app.methods.restoreTimeField = function (value) {
     if (value !== 0) {
       value = Date.parse(value)
@@ -60,7 +34,8 @@ export default function (app) {
       reader.onload = async (e) => {
         var data = new Uint8Array(reader.result);
         var workbook = XLSX.read(data, {type: "array"})
-        resolve(await this.processXLSXData(workbook))
+        // resolve(await this.processXLSXData(workbook))
+        resolve(workbook)
       }
     })
   } 
@@ -77,7 +52,7 @@ export default function (app) {
   }
     
 
-  app.methods.processXLSXData = async function (workbook) {
+  app.methods.parsingWorkbookToJSON = async function (workbook) {
     
     var sheet_name_list = workbook.SheetNames;
 
@@ -121,4 +96,31 @@ export default function (app) {
       
     return output
   }
+
+  app.methods.arrayToJSON = async function (array) {
+    let key = array[0]
+    let output = []
+    for (let i = 1; i < array.length; i++) {
+      let o = {}
+      key.forEach((k, j) => {
+        let value = array[i][j]
+        
+        if (this.timeFields.indexOf(k) > -1) {
+          value = this.restoreTimeField(value)
+        }
+        if (this.booleanFields.indexOf(k) > -1) {
+          value = this.restoreBooleanField(value)
+        }
+        if (this.arrayFields.indexOf(k) > -1) {
+          value = this.restoreArrayField(value)
+        }
+
+        o[k] = value
+      })
+
+      output.push(o)
+    }
+    return output
+  }
+
 }

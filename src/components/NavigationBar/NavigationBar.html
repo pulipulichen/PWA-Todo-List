@@ -1,7 +1,7 @@
 
 <div class="NavigationBar">
   <div class="ui top fixed menu"
-    :class="{inverted: (db.config.view === 'completed')}">
+    :class="computedNavigationBarClasses">
     <div class="item"
       :title="computedTitle">
       <img src="./favicon.png"

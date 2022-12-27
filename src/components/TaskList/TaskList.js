@@ -57,6 +57,18 @@ let app = {
       this.db.config.focusedTask = list[0]
 
       return list
+    },
+    hasPinned () {
+      let list = this.db.localConfig.tasks.filter(task => {
+        return (task.isPinned && this.showTask(task))
+      })
+      return (list.length > 0)
+    },
+    hasNotPinned () {
+      let list = this.db.localConfig.tasks.filter(task => {
+        return (!task.isPinned && this.showTask(task))
+      })
+      return (list.length > 0)
     }
   },
   mounted() {

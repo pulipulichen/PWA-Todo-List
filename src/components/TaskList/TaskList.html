@@ -1,6 +1,7 @@
 <div class="TaskList">
   
   <draggable v-model="db.localConfig.tasks" group="pinned"
+    v-if="hasPinned"
     class="ui vertical segment draggable">
     <TaskItem 
       v-for="task in db.localConfig.tasks"
@@ -11,6 +12,7 @@
   </draggable>
 
   <draggable v-model="db.localConfig.tasks" group="non_pinned"
+    v-if="hasNotPinned"
     class="ui vertical segment draggable">
     <TaskItem 
       v-for="task in db.localConfig.tasks"

@@ -52,7 +52,7 @@ export default function (app) {
     
     // ------------------
 
-    let filename = this.db.config.appNameID + dayjs().format('MMDD-HHmm') + '.ods' 
+    let filename = this.db.config.appNameID + '_' + dayjs().format('MMDD-HHmm') + '.ods' 
     
     if (this.backupHasFiles(tasks) === false) {
       XLSX.writeFile(wb, filename, {type: 'file', bookType: 'ods', compression: true}) // name of the file is 'book.xlsx'

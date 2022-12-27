@@ -34,10 +34,10 @@ let app = {
     // restore () {
     //   window.alert(this.$t('TODO'))
     // },
-    openFile: async function (event) {
-      if (!window.confirm(this.$t('Are you sure you want to restore?'))) {
-        return false
-      }
+    restore: async function (event) {
+      // if (!window.confirm(this.$t('Are you sure you want to restore?'))) {
+      //   return false
+      // }
       this.db.data.restore(event)
     },
     
