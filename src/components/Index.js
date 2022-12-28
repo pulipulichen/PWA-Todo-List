@@ -8,7 +8,7 @@ let Index = {
     PanelFilter: () => import(/* webpackChunkName: "components/PanelFilter" */ './PanelFilter/PanelFilter.vue'),
     ViewConfiguration: () => import(/* webpackChunkName: "components/ViewConfiguration" */ './ViewConfiguration/ViewConfiguration.vue'),
     DropZone: () => import(/* webpackChunkName: "components/DropZone" */ './DropZone/DropZone.vue'),
-    EmptyListMessage: () => import(/* webpackChunkName: "components/EmptyListMessage" */ './EmptyListMessage/EmptyListMessage.vue'),
+    ListPlaceholderMessage: () => import(/* webpackChunkName: "components/ListPlaceholderMessage" */ './ListPlaceholderMessage/ListPlaceholderMessage.vue'),
     DataTaskManager: () => import(/* webpackChunkName: "components/DataTaskManager" */ './DataTaskManager/DataTaskManager.vue'),
     DataManager: () => import(/* webpackChunkName: "components/DataManager" */ './DataManager/DataManager.vue')
   },
@@ -87,6 +87,10 @@ let Index = {
     
     initFileSystem: async function () {
       await this.db.utils.FileSystemUtils.init(this.db.config.appNameID)
+    },
+
+    focusAddTodo () {
+      this.$refs.NavigationBar.focusAddTodo()
     }
   }
 }

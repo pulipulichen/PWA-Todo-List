@@ -18,7 +18,9 @@ let app = {
     
   },
   methods: {
-    
+    focusAddTodo () {
+      this.$parent.focusAddTodo()
+    }
   }
 }
 

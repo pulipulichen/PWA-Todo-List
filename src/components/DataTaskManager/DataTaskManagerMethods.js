@@ -52,6 +52,7 @@ export default function (app) {
 
     this.db.localConfig.tasks.unshift(taskData)
     this.db.config.view = 'todo'
+    this.db.config.showConfiguration = false
     this.db.config.focusedTask = taskData
   }
 
@@ -94,8 +95,8 @@ export default function (app) {
     return task
   }
 
-  app.methods.cleanTask = function (task) {
-    console.log('@TODO cleanTask')
-  }
+  // app.methods.cleanTask = function (task) {
+  //   console.log('@TODO cleanTask')
+  // }
 
 }

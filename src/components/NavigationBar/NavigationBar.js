@@ -58,7 +58,9 @@ let app = {
     
   },
   methods: {
-    
+    focusAddTodo () {
+      this.$refs.ItemAddTodo.focusAddTodo()
+    }
   }
 }
 

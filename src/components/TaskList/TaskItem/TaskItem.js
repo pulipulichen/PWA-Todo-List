@@ -155,13 +155,20 @@ let app = {
     },
     focusRef: async function (ref) {
       this.db.config.focusedTask = this.task
+
       while (!this.$refs[ref]) {
         await this.db.utils.AsyncUtils.sleep(100)
       }
       // await nextTick()
-      this.$refs[ref].$el.scrollIntoView({
+      let ele = this.$refs[ref].$el
+      if (!ele) {
+        ele = this.$refs[ref]
+      }
+      // console.log(ref)
+      ele.scrollIntoView({
         behavior: 'smooth'
       })
+      ele.focus()
     },
     focusFilelist: async function () {
       return this.focusRef('PanelFileList')

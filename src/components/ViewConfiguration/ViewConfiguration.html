@@ -32,15 +32,25 @@
             :value="item">{{ $t(item) }}</option>
         </select>
       </div>
-      <div class="field">
-        <label for="background">{{ $t('background') }}</label>
-        <div class="ui input"
-          :class="{icon: (db.localConfig.backgroundImage.trim() !== '')}">
-          <input id="background" type="url" v-model="db.localConfig.backgroundImage" />
-          <i class="x link icon" @click="db.localConfig.backgroundImage = ''"
-            v-if="db.localConfig.backgroundImage.trim() !== ''" />
+      <div class="fields">
+        <div class="two wide field image-field">
+          <a href="https://www.pexels.com/discover/"
+            title="Pexels"
+            target="_blank"
+            class="ui labeled icon fluid button">
+            <i class="image icon" />{{ $t('Find') }}</a>
+        </div>
+        <div class="fourteen field">
+          <label for="background">{{ $t('background') }}</label>
+          <div class="ui input"
+            :class="{icon: (db.localConfig.backgroundImage.trim() !== '')}">
+            <input id="background" type="url" v-model="db.localConfig.backgroundImage" />
+            <i class="x link icon" @click="db.localConfig.backgroundImage = ''"
+              v-if="db.localConfig.backgroundImage.trim() !== ''" />
+          </div>
         </div>
       </div>
+        
       <div class="field">
         <PanelBackup 
           ref="PanelBackup"
