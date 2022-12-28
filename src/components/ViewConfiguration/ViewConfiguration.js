@@ -25,7 +25,19 @@ let app = {
         "pink",
         "brown",
         //"black" // 黑色是給isCompleted使用
-      ]
+      ],
+      backgroundList: [
+        "./assets/background/pexels-artem-saranin-1547813.jpg",
+        "./assets/background/pexels-eberhard-grossgasteiger-2310713.jpg",
+        "./assets/background/pexels-eusebiu-soica-13840288.jpg",
+        "./assets/background/pexels-levent-simsek-4651076.jpg",
+        "./assets/background/pexels-muhammad-khairul-iddin-adnan-808510.jpg",
+        "./assets/background/pexels-natalia-hutak-4072639.jpg",
+        "./assets/background/pexels-pixabay-301673.jpg",
+        "./assets/background/pexels-pradipna-lodh-711004.jpg",
+        "./assets/background/pexels-skylar-kang-6044224.jpg"
+      ],
+      selectedPresetBackground: ``
     }
   },
   watch: {
@@ -34,6 +46,13 @@ let app = {
     },
     'db.localConfig.backgroundImage' () {
       this.setBackgroundImage()
+    },
+    'selectedPresetBackground' (selectedPresetBackground) {
+      if (this.selectedPresetBackground === '') {
+        return false
+      }
+      this.db.localConfig.backgroundImage = selectedPresetBackground
+      this.selectedPresetBackground = ``
     }
   },
   // computed: {

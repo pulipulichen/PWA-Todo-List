@@ -40,17 +40,34 @@
             class="ui labeled icon fluid button">
             <i class="image icon" />{{ $t('Find') }}</a>
         </div>
-        <div class="fourteen field">
-          <label for="background">{{ $t('background') }}</label>
-          <div class="ui input"
-            :class="{icon: (db.localConfig.backgroundImage.trim() !== '')}">
-            <input id="background" type="url" v-model="db.localConfig.backgroundImage" />
-            <i class="x link icon" @click="db.localConfig.backgroundImage = ''"
-              v-if="db.localConfig.backgroundImage.trim() !== ''" />
-          </div>
+        <div class="fourteen wide field preset-background">
+          <label for="presetBackground">{{ $t('Preset Background') }}</label>
+          <select v-model="selectedPresetBackground">
+              <option value="">{{ $t('select a background...') }}</option>
+              <option v-for="url in backgroundList"
+                :value="url">
+                <img :src="url" />
+                {{ url.slice(url.lastIndexOf('/') + 1, url.lastIndexOf('.')).trim() }}
+              </option>
+            </select>
         </div>
       </div>
+      <div class=" field">
+        <label for="background">{{ $t('Background') }}</label>
+        <div class="ui input"
+          :class="{icon: (db.localConfig.backgroundImage.trim() !== '')}">
+          <input id="background" type="url" v-model="db.localConfig.backgroundImage" />
+          <i class="x link icon" @click="db.localConfig.backgroundImage = ''"
+            v-if="db.localConfig.backgroundImage.trim() !== ''" />
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui checkbox">
+          <input type="checkbox" v-model="db.localConfig.duplicateFileReplace" id="duplicateFileReplace" />
+          <label for="duplicateFileReplace">{{ $t('Replace duplicate file') }}</label>
+        </div>
         
+      </div>
       <div class="field">
         <PanelBackup 
           ref="PanelBackup"

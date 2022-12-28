@@ -72,7 +72,14 @@ let app = {
         });
       }
 
-      this.db.task.addTaskByFiles(files)
+      if (this.db.config.focusedTask) {
+        this.db.task.addFilesToTask(this.db.config.focusedTask, files)
+      }
+      else {
+        this.db.task.addTaskByFiles(files)
+      }
+      this.isDragging = false
+      this.isDragFromWindow = false
     },
     dragOverHandler(ev) {
       // console.log('File(s) in drop zone');

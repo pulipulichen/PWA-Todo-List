@@ -4,7 +4,8 @@ let localConfig = {
   favicon: '',
   backgroundImage: '',
   theme: 'default',
-  tasks: []
+  tasks: [],
+  duplicateFileReplace: true
 }
 
 // ----------------------------------------------------------------

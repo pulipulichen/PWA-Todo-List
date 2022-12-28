@@ -40,7 +40,14 @@ export default function (app) {
 
       // console.log({file, filename})
       let filePath = taskData.id + '/' + filename
-      let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+      let url
+      // console.log('dup', this.db.localConfig.duplicateFileReplace)
+      if (this.db.localConfig.duplicateFileReplace) {
+        url = await this.db.utils.FileSystemUtils.writeFileReplace(filePath, file)
+      }
+      else {
+        url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+      }
       // console.log(url, filePath)
 
       let urlFilename = this.db.utils.FileSystemUtils.basename(url)
@@ -63,12 +70,24 @@ export default function (app) {
       
       // console.log({file, filename})
       let filePath = task.id + '/' + filename
-      let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+      // let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+      let url
+      if (this.db.localConfig.duplicateFileReplace) {
+        url = await this.db.utils.FileSystemUtils.writeFileReplace(filePath, file)
+      }
+      else {
+        url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
+      }
       // console.log(url, filePath)
 
       let urlFilename = this.db.utils.FileSystemUtils.basename(url)
 
-      task.files.unshift(urlFilename)
+      if (task.files.indexOf(urlFilename) === -1) {
+        task.files.unshift(urlFilename)
+      }
+      else {
+        task.files.sort((x,y) => { return x == urlFilename ? -1 : y == urlFilename ? 1 : 0; });
+      }
     }
   }
   app.methods.buildTaskData = function () {

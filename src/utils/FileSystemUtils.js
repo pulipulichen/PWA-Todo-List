@@ -499,6 +499,11 @@ Message: ${e.message}`
       });
     })
   },
+  writeFileReplace: async function (filePath, file) {
+    console.log('writeFileReplace', filePath)
+    await this.remove(filePath)
+    return await this.writeFile(filePath, file)
+  },
   parsePath (path) {
     if (typeof(path) === 'number') {
       path = String(path)
