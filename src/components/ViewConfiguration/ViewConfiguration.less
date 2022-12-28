@@ -6,3 +6,19 @@
 .preset-background select {
   width: 100%;
 }
+
+.background.button {
+  color: rgba(0,0,0,0);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+
+  &:hover {
+    color: rgba(0,0,0,0) !important;
+  }
+
+  &.selected {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+}

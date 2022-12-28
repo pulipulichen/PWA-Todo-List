@@ -55,9 +55,26 @@ let app = {
       this.selectedPresetBackground = ``
     }
   },
-  // computed: {
-    
-  // },
+  computed: {
+    backgroundListRows () {
+      let rows = []
+
+      let wide = 5
+
+      let list = JSON.parse(JSON.stringify(this.backgroundList))
+      let firstRow = list.slice(0, wide - 1)
+      rows.push(firstRow)
+      list = list.slice(wide - 1)
+
+      while (list.length > 0) {
+         let row = list.slice(0, wide)
+         rows.push(row)
+         list = list.slice(wide)
+      }
+
+      return rows
+    }
+  },
   mounted() {
     // this.testViewConfiguration()
     this.setBackgroundImage()

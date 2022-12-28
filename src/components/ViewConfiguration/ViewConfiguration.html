@@ -32,26 +32,6 @@
             :value="item">{{ $t(item) }}</option>
         </select>
       </div>
-      <div class="fields">
-        <div class="two wide field image-field">
-          <a href="https://www.pexels.com/discover/"
-            title="Pexels"
-            target="_blank"
-            class="ui labeled icon fluid button">
-            <i class="image icon" />{{ $t('Find') }}</a>
-        </div>
-        <div class="fourteen wide field preset-background">
-          <label for="presetBackground">{{ $t('Preset Background') }}</label>
-          <select v-model="selectedPresetBackground">
-              <option value="">{{ $t('select a background...') }}</option>
-              <option v-for="url in backgroundList"
-                :value="url">
-                <img :src="url" />
-                {{ url.slice(url.lastIndexOf('/') + 1, url.lastIndexOf('.')).trim() }}
-              </option>
-            </select>
-        </div>
-      </div>
       <div class=" field">
         <label for="background">{{ $t('Background') }}</label>
         <div class="ui input"
@@ -59,6 +39,30 @@
           <input id="background" type="url" v-model="db.localConfig.backgroundImage" />
           <i class="x link icon" @click="db.localConfig.backgroundImage = ''"
             v-if="db.localConfig.backgroundImage.trim() !== ''" />
+        </div>
+      </div>
+      <div class="ui equal width grid">
+        <div class="equal width row" 
+          v-for="(row, i) in backgroundListRows">
+          <div class="column"
+            v-if="i === 0">
+            <a href="https://www.pexels.com/discover/"
+              title="Pexels"
+              target="_blank"
+              class="ui labeled icon fluid button">
+              <i class="image icon" />{{ $t('Find') }}</a>
+          </div>
+          <div class="column"
+            v-for="url in row">
+            <a
+              class="ui fluid background button"
+              :class="{selected: (db.localConfig.backgroundImage === url)}"
+              @click="db.localConfig.backgroundImage = url"
+              :style="{'background-image': `url(${url})`}"
+              :title="url.slice(url.lastIndexOf('/') + 1, url.lastIndexOf('.')).trim()">
+              {{ url.slice(url.lastIndexOf('/') + 1, url.lastIndexOf('.')).trim() }}
+            </a>
+          </div>
         </div>
       </div>
       <div class="field">
