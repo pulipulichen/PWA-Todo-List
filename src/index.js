@@ -119,9 +119,7 @@ let VueController = {
     appName () {
       let cacheKey = this.db.config.appName
 
-      const queryString = window.location.search
-      const urlParams = new URLSearchParams(queryString);
-      let id = urlParams.get('id')
+      let id = this.db.utils.URLUtils.getParameterID()
       if (id) {
         cacheKey = cacheKey + `_` + id
       }

@@ -875,6 +875,17 @@ Message: ${e.message}`
 
     return bytes.toFixed(dp) + ' ' + units[u];
   },
+  reset: async function () {
+    if (this.base !== '') {
+      await this.removeDir(this.base)
+    }
+    else {
+      let list = await this.list('')
+      for (let i = 0; i < list.length; i++) {
+        await this.remove(list[i])
+      }
+    }
+  },
   popupPreview: async function (path) {
     while (!this.fs) {
       await this.sleep(100)

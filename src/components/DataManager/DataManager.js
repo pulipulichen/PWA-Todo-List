@@ -54,7 +54,7 @@ let app = {
         }
       }
     },
-    reset () {
+    reset: async function () {
       // console.log('reset')
       this.arrayJSONAttributes.forEach(field => {
         this.db.localConfig[field] = this.db.localConfig[field].slice(0,0)
@@ -62,6 +62,8 @@ let app = {
       })
       this.db.config.view = 'todo'
       this.db.config.showConfigurations = false
+
+      await this.db.utils.FileSystemUtils.reset()
     }
   }
 }

@@ -5,9 +5,9 @@
     <div class="item"
       :title="computedTitle">
       <img src="./favicon.png"
-        v-if="!computedFavicon" />
+        v-show="!computedFavicon" />
       <img :src="computedFavicon"
-        v-else />
+        v-show="computedFavicon" />
     </div>
     <ItemAddTodo 
       ref="ItemAddTodo"
@@ -22,13 +22,13 @@
         <a class="item view-toggle"
           :class="{disabled: !hasTodoTasks}"
           @click="db.config.view = 'todo'"
-          v-if="db.config.view === 'completed'">
+          v-show="db.config.view === 'completed'">
           <img src="./list-todo.png" />
         </a>
         <a class="item view-toggle"
           :class="{disabled: !hasCompletedTasks}"
           @click="db.config.view = 'completed'"
-          v-if="db.config.view === 'todo'">
+          v-show="db.config.view === 'todo'">
           <img src="./list-complated.png" />
         </a>
       </template>

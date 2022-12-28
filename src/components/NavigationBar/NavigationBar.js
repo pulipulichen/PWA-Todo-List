@@ -1,8 +1,6 @@
 import ItemFileUpload from './ItemFileUpload/ItemFileUpload.vue'
 import ItemAddTodo from './ItemAddTodo/ItemAddTodo.vue'
 
-import colors from './semantic-ui-color.js'
-
 let app = {
   props: ['db'],
   components: {
@@ -32,7 +30,7 @@ let app = {
           classes.push(this.db.localConfig.theme + '-theme')
         }
       }
-      console.log(classes)
+      // console.log(classes)
       return classes
     },
     computedTitle () {

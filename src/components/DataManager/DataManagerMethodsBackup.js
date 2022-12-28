@@ -83,6 +83,16 @@ export default function (app) {
     return false
   }
 
+  app.methods.getTaskBackupFilePath = function (task) {
+    let title = task.title.trim()
+
+    if (title.length > 20) {
+      title = title.slice(0, 20).trim()
+    }
+
+    return task.id + ' - ' + title
+  }
+
   app.methods.backupFiles = async function (zip, tasks) {
     const rootFolder = zip.folder(this.db.config.appNameID) // 先建立資料夾
 
@@ -95,7 +105,7 @@ export default function (app) {
       }
 
       // 建立資料夾
-      let taskFolder = rootFolder.folder(task.id)
+      let taskFolder = rootFolder.folder(this.getTaskBackupFilePath(task))
       
       for (let j = 0; j < files.length; j++) {
         let file = files[j]

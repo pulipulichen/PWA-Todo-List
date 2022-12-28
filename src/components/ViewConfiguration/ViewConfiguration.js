@@ -42,6 +42,7 @@ let app = {
   mounted() {
     // this.testViewConfiguration()
     this.setBackgroundImage()
+    this.initTheme()
   },
   methods: {
     testViewConfiguration () {
@@ -56,8 +57,22 @@ let app = {
       }
       else {
         document.body.style.backgroundImage = `url(${url})`
+      } 
+    },
+    initTheme () {
+      if (this.db.localConfig.tasks.length === 0 && 
+          this.db.localConfig.theme === 'default') {
+        let id = this.db.utils.URLUtils.getParameterID()
+        if (!id) {
+          return false
+        }
+
+        let idCode = this.db.utils.StringUtils.hashCode(id)
+        console.log(idCode)
+        let themeIndex = idCode % (this.themeList.length - 1)
+        let theme = this.themeList[themeIndex+1]
+        this.db.localConfig.theme = theme
       }
-        
     }
   }
 }

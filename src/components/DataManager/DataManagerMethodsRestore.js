@@ -77,6 +77,13 @@ export default function (app) {
         let filename = filepath.slice(filepath.lastIndexOf('/') + 1)
         // 分析並還原到原本的位置
         let fileSystemPath = filepath.slice(filepath.indexOf('/') + 1)
+        fileSystemPath = fileSystemPath.split('/').map((part, i) => {
+          if (i !== 1) {
+            return part
+          }
+          
+          return part.slice(0, part.indexOf(' - ')).trim()
+        }).join('/')
         // console.log(filename)
         // console.log(filepath)
         // console.log(file)
