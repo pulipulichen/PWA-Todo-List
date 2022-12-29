@@ -6,6 +6,7 @@
     <TaskItem 
       v-for="task in db.localConfig.tasks"
       v-if="task.isPinned && showTask(task)"
+      ref="TaskItem"
       :db="db"
       :task="task">
     </TaskItem>
@@ -17,6 +18,7 @@
     <TaskItem 
       v-for="task in db.localConfig.tasks"
       v-if="!task.isPinned && showTask(task)"
+      ref="TaskItem"
       :db="db"
       :task="task">
     </TaskItem>

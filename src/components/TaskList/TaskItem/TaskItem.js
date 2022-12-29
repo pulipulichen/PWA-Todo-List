@@ -172,6 +172,16 @@ let app = {
     },
     focusFilelist: async function () {
       return this.focusRef('PanelFileList')
+    },
+    focusTitleInput: async function () {
+      let ref = 'PanelHeader'
+      this.db.config.focusedTask = this.task
+
+      while (!this.$refs[ref]) {
+        await this.db.utils.AsyncUtils.sleep(100)
+      }
+
+      this.$refs[ref].focusInput()
     }
   }
 }

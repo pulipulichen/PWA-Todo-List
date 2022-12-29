@@ -9,10 +9,13 @@
         :class="{'check': task.isCompleted}"></i>
       <input type="text" :value="task.title" 
         id="title"
+        ref="TitleInput"
         @input="$parent.setTask('title', $event.target.value)" 
         :placeholder="$t(`What's todo...`)"
         @keyup.enter.exact="$parent.focusDescription"
-        @keyup.esc.exact="db.config.focusedTask = null">
+        @keyup.esc.exact="db.config.focusedTask = null"
+        @keyup.up.exact="focusPrevTask"
+        @keyup.down.exact="focusNextTask">
     </div>
   </div>
   

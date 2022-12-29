@@ -21,11 +21,20 @@ let app = {
       return (this.task === this.db.config.focusedTask)
     }
   },
-  mounted() {
+  // mounted() {
     
-  },
+  // },
   methods: {
-    
+    focusPrevTask () {
+      return this.$parent.$parent.$parent.focusPrevTask(this.$parent)
+    },
+    focusNextTask () {
+      // console.log(this.$parent.$parent.$parent)
+      return this.$parent.$parent.$parent.focusNextTask(this.$parent)
+    },
+    focusInput () {
+      return this.$refs.TitleInput.focus()
+    }
   }
 }
 

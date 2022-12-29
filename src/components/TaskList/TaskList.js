@@ -79,7 +79,24 @@ let app = {
       let view = this.db.config.view
       // console.log(view, task.isCompleted)
       return ((view === 'todo' && !task.isCompleted) || (view === 'completed' && task.isCompleted))
-    }
+    },
+    focusPrevTask (task) {
+      let index = this.$refs.TaskItem.indexOf(task)
+      if (index === 0) {
+        return false
+      }
+      this.$refs.TaskItem[(index-1)].focusTitleInput()
+      // console.log(this.$refs.TaskItem.length, this.$refs.TaskItem.indexOf(task))
+    },
+    focusNextTask (task) {
+      let index = this.$refs.TaskItem.indexOf(task)
+      if (index === this.$refs.TaskItem.length - 1) {
+        return false
+      }
+      this.$refs.TaskItem[(index+1)].focusTitleInput()
+      // console.log(this.$refs.TaskItem.length, this.$refs.TaskItem.indexOf(task))
+    },
+
   }
 }
 
