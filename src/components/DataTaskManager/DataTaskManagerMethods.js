@@ -14,8 +14,15 @@ export default function (app) {
       },
       addFilesToTask: (task, files) => {
         this.addFilesToTask(task, files)
+      },
+      appendURLToTaskDescription:(task, url) => {
+        this.appendURLToTaskDescription(task, url)
+      },
+      addTaskByURL: (url) => {
+        this.addTaskByURL(url)
       }
     }
+    // console.log(this.db.task)
   }
   
   app.methods.addTaskByFiles = async function (files) {
@@ -114,8 +121,45 @@ export default function (app) {
     return task
   }
 
-  // app.methods.cleanTask = function (task) {
-  //   console.log('@TODO cleanTask')
-  // }
+  app.methods.appendURLToTaskDescription = function (task, url) {
+    if (task.description.trim().endsWith(url)) {
+      return false
+    }
+
+    task.description = task.description + '\n' + url
+  }
+
+  app.methods.addTaskByURL = async function (title) {
+    // console.log(title)
+
+    // 先檢查有沒有重複的任務
+    for (let i = 0; i < this.db.localConfig.tasks.length; i++) {
+      let task = this.db.localConfig.tasks[i]
+
+      if (task.title.trim() === title || 
+        task.description.trim() === title) {
+        return false
+      }
+    }
+
+    let description = ''
+
+    if (this.db.utils.URLUtils.isURL(title)) {
+      let websiteURL = await this.db.utils.URLUtils.getTitle(title)
+      if (websiteURL) {
+        description = title
+        title = websiteURL
+      }
+    }
+
+    let task = this.buildTaskData()
+    task.title = title
+    task.description = description
+
+    this.db.localConfig.tasks.unshift(task)
+    // console.log(title, description)
+
+    // console.log('@TODO cleanTask')
+  }
 
 }

@@ -1,3 +1,6 @@
+// import $ from 'jquery'
+import axios from 'axios'
+
 export default {
   isURL: function (str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -16,5 +19,21 @@ export default {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get('id')
+  },
+  getTitle: async function (url) {
+    if (url.indexOf('//') > -1) {
+      url = url.slice(url.indexOf('//') + 2)
+    }
+    url = "https://script.google.com/macros/s/AKfycbz_ePQoQw651KqM8z-C1FOInhyM40Y5WrDsbxDjr0xBcLoT8HowCWkIA2RR_12v353c/exec?url=" + url
+    let result = await axios.get(url)
+    return result.data.output
+    // return new Promise(function (resolve, reject) {
+    //   $.ajax({
+    //     url,
+    //     complete: function(data) {
+    //       resolve(data.responseText);
+    //     }
+    //   });
+    // })
   }
 }

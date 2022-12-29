@@ -4,7 +4,11 @@ let app = {
     this.$i18n.locale = this.db.localConfig.locale
     return {
       isDragging: false,
-      isDragFromWindow: false
+      isDragFromWindow: false,
+      stringTypes: [
+        'text/uri-list',
+        'text/html'
+      ]
     }
   },
   watch: {
@@ -54,7 +58,34 @@ let app = {
       ev.preventDefault();
 
       let files = []
+      
+      // console.log(ev.dataTransfer.items[1])
+      // console.log(ev.dataTransfer.items[1].kind)
+      // console.log(ev.dataTransfer.items[1].type)
+      // console.log(ev.dataTransfer.getData("URL"))
+      // console.log(ev.dataTransfer.getData("text"))
+      // console.log(ev.dataTransfer.getData("text/uri-list"))
+      // console.log(ev.dataTransfer.getData("text/plain"))
+      // console.log(ev.dataTransfer.getData("text/x-moz-url"))
+      // console.log(ev.dataTransfer.getData("text/html"))
+      
+      if (ev.dataTransfer.items[1] && 
+          this.stringTypes.indexOf(ev.dataTransfer.items[1].type) > -1) {
+          
+        let url = ev.dataTransfer.getData("URL")
+        if (url === '') {
+          url = ev.dataTransfer.getData("text")
+        }
+
+        if (this.db.config.focusedTask) {
+          this.db.task.appendURLToTaskDescription(this.db.config.focusedTask, url)
+        }
+        else {
+          this.db.task.addTaskByURL(url)
+        }
+      }
       if (ev.dataTransfer.items) {
+        
         // Use DataTransferItemList interface to access the file(s)
         [...ev.dataTransfer.items].forEach((item, i) => {
           // If dropped items aren't files, reject them
@@ -72,12 +103,15 @@ let app = {
         });
       }
 
-      if (this.db.config.focusedTask) {
-        this.db.task.addFilesToTask(this.db.config.focusedTask, files)
+      if (files.length > 0) {
+        if (this.db.config.focusedTask) {
+          this.db.task.addFilesToTask(this.db.config.focusedTask, files)
+        }
+        else {
+          this.db.task.addTaskByFiles(files)
+        }
       }
-      else {
-        this.db.task.addTaskByFiles(files)
-      }
+        
       this.isDragging = false
       this.isDragFromWindow = false
     },
