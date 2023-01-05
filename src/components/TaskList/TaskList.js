@@ -77,8 +77,18 @@ let app = {
   methods: {
     showTask (task) {
       let view = this.db.config.view
+
+			let basicMatch = ((view === 'todo' && !task.isCompleted) || (view === 'completed' && task.isCompleted))
+			if (this.db.config.search !== '') {
+				if (task.title.indexOf(this.db.config.search) === -1 && 
+					task.description.indexOf(this.db.config.search) === -1 && 
+					task.location.indexOf(this.db.config.search) === -1 && 
+					task.files.join('').indexOf(this.db.config.search) === -1) {
+					return false
+				}
+			}
       // console.log(view, task.isCompleted)
-      return ((view === 'todo' && !task.isCompleted) || (view === 'completed' && task.isCompleted))
+      return basicMatch
     },
     focusPrevTask (task) {
       let index = this.$refs.TaskItem.indexOf(task)

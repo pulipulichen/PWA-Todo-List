@@ -84,7 +84,7 @@ let app = {
           this.db.task.addTaskByURL(url)
         }
       }
-      if (ev.dataTransfer.items) {
+      else if (ev.dataTransfer.items) {
         
         // Use DataTransferItemList interface to access the file(s)
         [...ev.dataTransfer.items].forEach((item, i) => {
