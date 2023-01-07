@@ -1,6 +1,7 @@
 <div class="TaskList">
   
   <draggable v-model="db.localConfig.tasks" group="pinned"
+    handle=".drag-handler"
     v-if="hasPinned"
     class="ui vertical segment draggable">
     <TaskItem 
@@ -13,6 +14,7 @@
   </draggable>
 
   <draggable v-model="db.localConfig.tasks" group="non_pinned"
+    handle=".drag-handler"
     v-if="hasNotPinned"
     class="ui vertical segment draggable">
     <TaskItem 

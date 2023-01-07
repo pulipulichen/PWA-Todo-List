@@ -1,6 +1,16 @@
 <div class="header row PanelHeader">
+  <div class="header-icon drag-handler column"
+    v-show="db.config.focusedTask !== task"
+    :class="{hide: (db.config.focusedTask === task)}"
+    @click.prevent.stop="db.config.focusedTask = task">
+    <i class="bars icon"></i>
+  </div>
+  <div class="header-icon column"
+    v-if="db.config.focusedTask == task"
+    @click.prevent.stop="db.config.focusedTask = null">
+    <i class="x icon"></i>
+  </div>
   <div class="title column"
-    @click="db.config.focusedTask = task"
     @dblclick.prevent="db.config.focusedTask = null"
     :class="{focused: isFocused}">
     <div class="ui transparent left icon input">
@@ -15,7 +25,8 @@
         @keyup.enter.exact="$parent.focusDescription"
         @keyup.esc.exact="db.config.focusedTask = null"
         @keyup.up.exact="focusPrevTask"
-        @keyup.down.exact="focusNextTask">
+        @keyup.down.exact="focusNextTask"
+        class="drag-disabled">
     </div>
   </div>
   
