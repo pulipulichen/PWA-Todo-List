@@ -93,6 +93,9 @@ let app = {
     },
     focusPriorityPanel () {
       this.$parent.$parent.focusPriorityPanel()
+    },
+    focusDescription () {
+      this.$parent.$parent.focusDescription()
     }
   }
 }

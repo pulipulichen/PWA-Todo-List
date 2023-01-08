@@ -137,9 +137,6 @@ let VueController = {
 
       return cacheKey
     },
-    appID () {
-      
-    }
   },
   watch: {},
   mounted: async function () {
