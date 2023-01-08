@@ -17,7 +17,7 @@
       <i class="circle outline link icon" 
         @click="$parent.setTask('isCompleted', !task.isCompleted)"
         :class="{'check': task.isCompleted}"></i>
-      <input type="text" :value="task.title" 
+      <input type="text" v-model="task.title" 
         id="title"
         ref="TitleInput"
         @input="$parent.setTask('title', $event.target.value)" 
