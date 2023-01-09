@@ -91,6 +91,10 @@ let Index = {
 
     focusAddTodo () {
       this.$refs.NavigationBar.focusAddTodo()
+    },
+
+    focusFocusedTaskDescription () {
+      this.$refs.TaskList.focusFocusedTaskDescription()
     }
   }
 }

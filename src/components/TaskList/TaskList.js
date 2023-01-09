@@ -106,7 +106,14 @@ let app = {
       this.$refs.TaskItem[(index+1)].focusTitleInput()
       // console.log(this.$refs.TaskItem.length, this.$refs.TaskItem.indexOf(task))
     },
-
+    focusFocusedTaskDescription () {
+      let index = this.db.localConfig.tasks.indexOf(this.db.config.focusedTask)
+      console.log(index, this.db.localConfig.tasks, this.db.config.focusedTask)
+      if (index > -1) {
+        this.$refs.TaskItem[index].focusDescription()
+      }
+        
+    }
   }
 }
 

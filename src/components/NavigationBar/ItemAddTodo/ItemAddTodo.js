@@ -20,7 +20,7 @@ let app = {
     
   },
   methods: {
-    addTodo () {
+    addTodo: async function () {
       if (this.canAddTodo === false) {
         return false
       }
@@ -29,6 +29,11 @@ let app = {
       this.db.localConfig.tasks.unshift(taskData)
       this.db.config.view = 'todo'
       this.db.config.showConfiguration = false
+
+      this.db.config.focusAddTodo = taskData
+
+      await this.db.utils.AsyncUtils.sleep(100)
+      this.$parent.$parent.focusFocusedTaskDescription()
     },
     focusAddTodoInput () {
       if (!this.$refs.AddTodoInput) {
