@@ -14,7 +14,7 @@
             <textarea :value="task.description" 
               class="drag-disabled"
               @input="setTask('description', $event.target.value)" 
-              @keyup.esc.exact="db.config.focusedTask = null"
+              @keyup.esc.exact="blurTask"
               ref="TextareaDescription"></textarea>
           </div>
         </div>
@@ -29,7 +29,7 @@
                 :value="task.location"
                 class="drag-disabled"
                 @input="setTask('location', $event.target.value)"
-                @keyup.esc.exact="db.config.focusedTask = null" />
+                @keyup.esc.exact="blurTask" />
               <button class="ui icon button"
                 :class="{disabled: (task.location.trim() === '')}"
                 @click="searchMap">

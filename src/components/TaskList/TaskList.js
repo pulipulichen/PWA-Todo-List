@@ -108,6 +108,7 @@ let app = {
     },
     focusFocusedTaskDescription () {
       let index = this.db.localConfig.tasks.indexOf(this.db.config.focusedTask)
+      // index--
       // console.log(index, this.db.localConfig.tasks, this.db.config.focusedTask)
       // if (index > -1) {
       this.$refs.TaskItem[index].focusDescription()

@@ -182,7 +182,15 @@ let app = {
       }
 
       this.$refs[ref].focusInput()
+    },
+    blurTask: function (event) {
+      console.log(event.isComposing)
+      if (event.isComposing) {
+          return false
+      }
+      this.db.config.focusedTask = null
     }
+      
   }
 }
 
