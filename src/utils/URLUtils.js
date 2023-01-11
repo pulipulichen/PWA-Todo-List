@@ -20,7 +20,7 @@ export default {
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get('id')
   },
-  getTitle: async function (url) {
+  getTitle: async function (url = 'https://blog.pulipuli.info/') {
     if (url.indexOf('//') > -1) {
       url = url.slice(url.indexOf('//') + 2)
     }
@@ -35,5 +35,14 @@ export default {
     //     }
     //   });
     // })
+  },
+  getBase64: async function (url = 'https://lh3.googleusercontent.com/-tkBPlsBsFJg/V0M0b-gPKNI/AAAAAAACw9Y/Y-2BGg4z3H4/Image.jpg?imgmax=800', type = 'image/jpeg') {
+    if (url.indexOf('//') > -1) {
+      url = url.slice(url.indexOf('//') + 2)
+    }
+    url = "https://script.google.com/macros/s/AKfycbxf70kxzA1hrMgJn6V0jYDtQ5Vnh-Yqu4E2X6SCXGEAzmjX897V8BvoekdXlSuvQ4TK/exec?url=" + url + '&type=' + type
+    let result = await axios.get(url)
+    return result.data.output
+    
   }
 }

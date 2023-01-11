@@ -15,16 +15,16 @@ export default function (app) {
       addFilesToTask: (task, files) => {
         this.addFilesToTask(task, files)
       },
-      appendURLToTaskDescription:(task, url) => {
-        this.appendURLToTaskDescription(task, url)
+      appendURLToTaskDescription: (task, url, types) => {
+        this.appendURLToTaskDescription(task, url, types)
       },
-      addTaskByURL: (url) => {
-        this.addTaskByURL(url)
+      addTaskByURL: (url, types) => {
+        this.addTaskByURL(url, types)
       }
     }
     // console.log(this.db.task)
   }
-  
+
   app.methods.addTaskByFiles = async function (files) {
     if (files.length === 0) {
       return false
@@ -36,10 +36,10 @@ export default function (app) {
     for (let i = 0; i < files.length; i++) {
       let file = files[i]
       let filename = file.name
-      
+
       // ---------------------------------
       // 建立task
-      
+
       filenames.push(filename)
 
       // ---------------------------------
@@ -74,7 +74,7 @@ export default function (app) {
     for (let i = 0; i < files.length; i++) {
       let file = files[i]
       let filename = file.name
-      
+
       // console.log({file, filename})
       let filePath = task.id + '/' + filename
       // let url = await this.db.utils.FileSystemUtils.writeFile(filePath, file)
@@ -93,10 +93,34 @@ export default function (app) {
         task.files.unshift(urlFilename)
       }
       else {
-        task.files.sort((x,y) => { return x == urlFilename ? -1 : y == urlFilename ? 1 : 0; });
+        task.files.sort((x, y) => { return x == urlFilename ? -1 : y == urlFilename ? 1 : 0; });
       }
     }
   }
+
+  app.methods.addBase64FileToTask = async function (task, filename, base64) {
+    let filePath = task.id + '/' + filename
+    let url
+
+    let blob = await (await fetch(base64)).blob()
+    // console.log(base64)
+    // console.log(blob)
+    if (this.db.localConfig.duplicateFileReplace) {
+      url = await this.db.utils.FileSystemUtils.writeFileReplace(filePath, blob)
+    }
+    else {
+      url = await this.db.utils.FileSystemUtils.writeFile(filePath, blob)
+    }
+    let urlFilename = this.db.utils.FileSystemUtils.basename(url)
+
+    if (task.files.indexOf(urlFilename) === -1) {
+      task.files.unshift(urlFilename)
+    }
+    else {
+      task.files.sort((x, y) => { return x == urlFilename ? -1 : y == urlFilename ? 1 : 0; });
+    }
+  }
+
   app.methods.buildTaskData = function () {
     let addTodoText = this.db.config.addTodoText
     this.db.config.addTodoText = ''
@@ -129,30 +153,53 @@ export default function (app) {
     task.description = task.description + '\n' + url
   }
 
-  app.methods.addTaskByURL = async function (title) {
+  app.methods.addTaskByURL = async function (title, types) {
     // console.log(title)
+
+
 
     // 先檢查有沒有重複的任務
     for (let i = 0; i < this.db.localConfig.tasks.length; i++) {
       let task = this.db.localConfig.tasks[i]
 
-      if (task.title.trim() === title || 
+      if (task.title.trim() === title ||
         task.description.trim() === title) {
         return false
       }
     }
 
+    let task = this.buildTaskData()
     let description = ''
 
     if (this.db.utils.URLUtils.isURL(title)) {
-      let websiteURL = await this.db.utils.URLUtils.getTitle(title)
-      if (websiteURL) {
-        description = title
-        title = websiteURL
+      let imageType = false
+      for (let i = 0; i < types.length; i++) {
+        if (types[i].startsWith('image/')) {
+          imageType = types[i]
+          break
+        }
       }
+
+      if (imageType) {
+        // title = websiteURL
+        let base64 = await this.db.utils.URLUtils.getBase64(title, imageType)
+        let filename = title.split('/').pop().split('#')[0].split('?')[0];
+
+        await this.addBase64FileToTask(task, filename, base64)
+        description = title
+        title = filename
+      }
+      else {
+        let websiteURL = await this.db.utils.URLUtils.getTitle(title)
+        if (websiteURL) {
+          description = title
+          title = websiteURL
+        }
+      }
+
     }
 
-    let task = this.buildTaskData()
+
     task.title = title
     task.description = description
 

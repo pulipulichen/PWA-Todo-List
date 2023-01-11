@@ -61,7 +61,15 @@ let app = {
       
       // console.log(ev.dataTransfer.items[1])
       // console.log(ev.dataTransfer.items[1].kind)
-      // console.log(ev.dataTransfer.items[1].type)
+      let types = []
+      for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+        types.push(ev.dataTransfer.items[i].type)
+        console.log(ev.dataTransfer.items[i].type)
+        ev.dataTransfer.items[i].getAsString(console.log)
+      }
+
+      // console.log(types)
+      
       // console.log(ev.dataTransfer.getData("URL"))
       // console.log(ev.dataTransfer.getData("text"))
       // console.log(ev.dataTransfer.getData("text/uri-list"))
@@ -69,6 +77,8 @@ let app = {
       // console.log(ev.dataTransfer.getData("text/x-moz-url"))
       // console.log(ev.dataTransfer.getData("text/html"))
       
+      
+
       if (ev.dataTransfer.items[1] && 
           this.stringTypes.indexOf(ev.dataTransfer.items[1].type) > -1) {
           
@@ -78,10 +88,10 @@ let app = {
         }
 
         if (this.db.config.focusedTask) {
-          this.db.task.appendURLToTaskDescription(this.db.config.focusedTask, url)
+          this.db.task.appendURLToTaskDescription(this.db.config.focusedTask, url, types)
         }
         else {
-          this.db.task.addTaskByURL(url)
+          this.db.task.addTaskByURL(url, types)
         }
       }
       else if (ev.dataTransfer.items) {
