@@ -29,10 +29,12 @@ let app = {
       this.db.localConfig.tasks.unshift(taskData)
       this.db.config.view = 'todo'
       this.db.config.showConfiguration = false
-
+      this.db.config.focusedTask = null
+      return taskData
     },
     addTodoDescription: async function () {
-      if (await this.addTodo() === false) {
+      let taskData = await this.addTodo()
+      if (taskData === false) {
         return false
       }
 

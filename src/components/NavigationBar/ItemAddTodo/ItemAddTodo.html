@@ -10,7 +10,7 @@
       v-model="db.config.addTodoText"
       :placeholder="$t(`What's todo...`)"
       @keyup.enter.exact="addTodo"
-      @keyup.ctrl.enter.exact="addTodoDescription"
+      @keypress.ctrl.enter.exact="addTodoDescription"
       ref="AddTodoInput"
       />
   </div>
