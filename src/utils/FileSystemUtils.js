@@ -843,7 +843,11 @@ Message: ${e.message}`
           let sizeNumber = size
           size = this.humanFileSize(size)
           let fileMIME = mime.lookup(path)
-          let fileMIMEicon = fileMIME.replace(/\//g, '-')
+          let fileMIMEicon = 'gnome-mime-image'
+          if (fileMIME) {
+            fileMIMEicon = fileMIME.replace(/\//g, '-')
+          }
+            
           resolve({modificationTime, size, sizeNumber, mime: fileMIME, mimeIcon: fileMIMEicon})
         }, reject)
       })

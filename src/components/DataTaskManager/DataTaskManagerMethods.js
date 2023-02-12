@@ -20,6 +20,9 @@ export default function (app) {
       },
       addTaskByURL: (url, types) => {
         this.addTaskByURL(url, types)
+      },
+      addTaskByDrop: (dropResult) => {
+        this.addTaskByDrop(dropResult)
       }
     }
     // console.log(this.db.task)
@@ -207,6 +210,43 @@ export default function (app) {
     // console.log(title, description)
 
     // console.log('@TODO cleanTask')
+  }
+
+  app.methods.addTaskByDrop = async function (dropResult) {
+    
+    if (this.db.config.focusedTask) {
+      if (dropResult.files && dropResult.files.length > 0) {
+        this.addFilesToTask(this.db.config.focusedTask, dropResult.files)
+      }
+      if (dropResult.title && dropResult.title.length > 0) {
+        this.db.config.focusedTask.description = this.db.config.focusedTask.description + '\n' + dropResult.title
+      }
+      if (dropResult.description && dropResult.description.length > 0) {
+        this.db.config.focusedTask.description = this.db.config.focusedTask.description + '\n' + dropResult.description
+      }
+    }
+    else {
+      let task = this.db.task.buildTaskData()
+      if (dropResult.title) {
+        task.title = dropResult.title
+      }
+      
+      if (dropResult.description) {
+        task.description = dropResult.description
+      }
+        
+      if (dropResult.files && dropResult.files.length > 0) {
+        this.db.task.addFilesToTask(task, dropResult.files)
+
+        if (!dropResult.title || dropResult.title === '') {
+          task.title = dropResult.files.map(f => f.name.trim()).join(', ')
+        }
+      }
+
+      
+      this.db.localConfig.tasks.unshift(task)
+    }
+
   }
 
 }

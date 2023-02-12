@@ -29,7 +29,7 @@ let app = {
     },
     thumbnail () {
       if (this.isImage) {
-        return `url(${this.fileSystemURL}`
+        return `url('${this.fileSystemURL}')`
       }
       else {
         return `url(${this.mimeIcon})`

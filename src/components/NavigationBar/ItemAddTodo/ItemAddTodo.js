@@ -30,8 +30,13 @@ let app = {
       this.db.config.view = 'todo'
       this.db.config.showConfiguration = false
 
-      this.db.config.focusedTask = taskData
+    },
+    addTodoDescription: async function () {
+      if (await this.addTodo() === false) {
+        return false
+      }
 
+      this.db.config.focusedTask = taskData
       await this.db.utils.AsyncUtils.sleep(100)
       this.$parent.$parent.focusFocusedTaskDescription()
     },

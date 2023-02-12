@@ -17,7 +17,8 @@ let app = {
       return this.task.files[0]
     },
     filePath () {
-      return this.task.id + '/' + this.file
+      // console.log(this.task.files)
+      return this.task.id + '/' + this.task.files[0]
     },
     fileSystemURL () {
       return this.db.utils.FileSystemUtils.getFileSystemUrl(this.filePath)
@@ -27,7 +28,8 @@ let app = {
     },
     thumbnail () {
       if (this.isImage) {
-        return `url(${this.fileSystemURL}`
+        console.log(`url('${this.fileSystemURL}')`)
+        return `url('${this.fileSystemURL}')`
       }
       else {
         return `url(${this.mimeIcon})`

@@ -16,7 +16,7 @@
   </PanelHeadMetaFile>
   
   <button type="button" class="ui icon transparent basic button meta-button"
-    v-if="task.description.trim() !== ''"
+    v-if="task.description && task.description.trim() !== ''"
     @click="focusDescription">
     <i class="comment alternate outline icon"></i>
   </button>
