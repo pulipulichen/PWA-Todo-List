@@ -2,7 +2,7 @@
 <div class="NavigationBar">
   <div class="ui top fixed menu"
     :class="computedNavigationBarClasses">
-    <div class="item"
+    <div class="item favicon"
       :title="computedTitle">
       <img src="./favicon.png"
         v-show="!computedFavicon" />
@@ -15,6 +15,7 @@
     </ItemAddTodo>
     <div class="right menu">
       <ItemFileUpload 
+        class="item-file-upload"
         ref="ItemFileUpload"
         :db="db">
       </ItemFileUpload>
