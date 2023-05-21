@@ -1,6 +1,13 @@
 .fixed.menu {
   .item.ItemAddTodo.add-todo {
     width: calc(100% - 17rem) !important;
+
+    @media screen and (max-width:512px) { 
+      // background-color: red !important;
+      width: calc(100% - 8rem) !important;
+    }
+
+
     cursor: pointer;
     // width: 100% !important;
   
@@ -24,12 +31,5 @@
       color: rgba(255,255,255,0.8) !important;
     }
       
-  }
-}
-
-@media screen and (max-width:512px) { 
-  .ItemAddTodo .ui.transparent[class*="left icon"].input > input {
-    padding-left: 0 !important;
-    //background-color: red !important;
   }
 }
