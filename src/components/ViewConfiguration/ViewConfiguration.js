@@ -104,7 +104,7 @@ let app = {
         }
 
         let idCode = this.db.utils.StringUtils.hashCode(id)
-        console.log(idCode)
+        // console.log(idCode)
         let themeIndex = idCode % (this.themeList.length - 1)
         let theme = this.themeList[themeIndex+1]
         this.db.localConfig.theme = theme
