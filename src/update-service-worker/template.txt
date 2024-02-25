@@ -16,7 +16,7 @@
 // Names of the two caches used in this version of the service worker.
 // Change to v2, etc. when you update any of the local resources, which will
 // in turn trigger the install event again.
-const PRECACHE = 'precache-v20240226-021930';
+const PRECACHE = '{{timestamp}}';
 const RUNTIME = 'runtime';
 
 /**
@@ -27,66 +27,7 @@ const RUNTIME = 'runtime';
  */
 
 // A list of local resources we always want to be cached.
-const PRECACHE_URLS = [
-  "dist/asset/author.png",
-  "dist/asset/brand-icons.eot",
-  "dist/asset/brand-icons.svg",
-  "dist/asset/brand-icons.ttf",
-  "dist/asset/brand-icons.woff",
-  "dist/asset/brand-icons.woff2",
-  "dist/asset/favicon.png",
-  "dist/asset/flags.png",
-  "dist/asset/good-job.gif",
-  "dist/asset/icons.eot",
-  "dist/asset/icons.svg",
-  "dist/asset/icons.ttf",
-  "dist/asset/icons.woff",
-  "dist/asset/icons.woff2",
-  "dist/asset/list-complated.png",
-  "dist/asset/list-todo.png",
-  "dist/asset/outline-icons.eot",
-  "dist/asset/outline-icons.svg",
-  "dist/asset/outline-icons.ttf",
-  "dist/asset/outline-icons.woff",
-  "dist/asset/outline-icons.woff2",
-  "dist/asset/start.png",
-  "dist/components/DataManager.js",
-  "dist/components/DataManager.js.map",
-  "dist/components/DataTaskManager.js",
-  "dist/components/DataTaskManager.js.map",
-  "dist/components/DropZone.js",
-  "dist/components/DropZone.js.map",
-  "dist/components/EmptyListMessage.js",
-  "dist/components/EmptyListMessage.js.map",
-  "dist/components/ListPlaceholderMessage.js",
-  "dist/components/ListPlaceholderMessage.js.map",
-  "dist/components/NavigationBar.js",
-  "dist/components/NavigationBar.js.map",
-  "dist/components/PanelBackup.js",
-  "dist/components/PanelBackup.js.map",
-  "dist/components/PanelFilter.js",
-  "dist/components/PanelFilter.js.map",
-  "dist/components/TaskList.js",
-  "dist/components/TaskList.js.map",
-  "dist/components/ViewConfiguration.js",
-  "dist/components/ViewConfiguration.js.map",
-  "dist/index.js",
-  "dist/index.js.map",
-  "dist/vendors/semantic-ui-niwsf.js",
-  "dist/vendors/semantic-ui-niwsf.js.map",
-  "dist/vendors~components/DataManager.js",
-  "dist/vendors~components/DataManager.js.map",
-  "dist/vendors~components/DataManager~components/PanelBackup.js",
-  "dist/vendors~components/PanelBackup.js",
-  "dist/vendors~components/PanelBackup.js.map",
-  "dist/vendors~components/TaskList.js",
-  "dist/vendors~components/TaskList.js.map",
-  "dist/vendors~components/ViewConfiguration.js",
-  "dist/vendors~components/ViewConfiguration.js.map",
-  "index.html",
-  "manifest.json",
-  "service-worker.js"
-];
+const PRECACHE_URLS = {{urls}};
 
 // The install handler takes care of precaching the resources we always need.
 self.addEventListener('install', event => {
