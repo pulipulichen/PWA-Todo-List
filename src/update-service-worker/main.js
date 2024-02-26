@@ -29,7 +29,9 @@ function getAllFiles(dirPath, arrayOfFiles) {
     return arrayOfFiles;
 }
 
-let filesArray = getAllFiles('./dist');
+let filesArray = getAllFiles('./dist')
+
+filesArray = filesArray.concat(getAllFiles('./assets'))
 
 filesArray = filesArray.concat([
   'index.html',
