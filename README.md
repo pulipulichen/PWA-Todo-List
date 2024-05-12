@@ -10,7 +10,7 @@ A to-do list that can save files and only stores data in the browser, allowing f
 ## Technologies
 
 - JavaScript
-- PWA: Progressive Web App 漸進式網路應用程式- 
+- PWA: Progressive Web App 漸進式網路應用程式
 
 ----
 
