@@ -1,5 +1,6 @@
-# PWA-Todo-List: 待辦事項應用程式
+[![DOI](https://zenodo.org/badge/581753750.svg)](https://zenodo.org/doi/10.5281/zenodo.11214044)
 
+# PWA-Todo-List: 待辦事項應用程式
 
 A to-do list that can save files and only stores data in the browser, allowing for offline use. It is suitable for integration with other systems.
 

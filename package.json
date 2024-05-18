@@ -26,12 +26,18 @@
     "PWA",
     "HTML5 FileSystem API"
   ],
-  "author": "Pulipuli Chen",
+  "author": {
+    "name": "Yung-Ting Chen",
+    "email": "blog@pulipuli.info",
+    "orcid": "https://orcid.org/0000-0003-3751-610X",
+    "url": "https://blog.pulipuli.info"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pulipulichen/PWA-TODO-LIST/issues"
   },
   "homepage": "https://github.com/pulipulichen/PWA-TODO-LIST#readme",
+  "doi": "10.5281/zenodo.11214044",
   "devDependencies": {
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "7.5.5",
