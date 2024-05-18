@@ -1,7 +1,7 @@
 {
   "name": "PWA-TODO-LIST",
   "version": "1.0.0",
-  "description": "A todo list used to integrated in Webpage Dashboard.",
+  "description": "A to-do list that can save files and only stores data in the browser, allowing for offline use. It is suitable for integration with other systems.",
   "main": "index.js",
   "scripts": {
     "start": "bash ./docker-compose/d3.webpack-watch-build-production.sh",
@@ -14,21 +14,24 @@
     "d2.webpack-watch-development": "bash ./docker-compose/d2.webpack-watch-development.sh",
     "d3.webpack-watch-build-production": "bash ./docker-compose/d3.webpack-watch-build-production.sh",
     "d4.webpack-build-production": "bash ./docker-compose/d4.webpack-build-production.sh",
-    "update-service-worker.js": "node ./src/update-service-worker/main.js"
+    "update-service-worker.js": "node ./src/update-service-worker/main.js",
+    "tag": "./build/tag.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://pulipuli.chen@gmail.com@github.com/pulipulichen/HTML-Simple-Classifier.git"
+    "url": "git+https://pulipuli.chen@gmail.com@github.com/pulipulichen/PWA-TODO-LIST.git"
   },
   "keywords": [
-    "Machine Learning"
+    "JavaScript",
+    "PWA",
+    "HTML5 FileSystem API"
   ],
   "author": "Pulipuli Chen",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pulipulichen/HTML-Simple-Classifier/issues"
+    "url": "https://github.com/pulipulichen/PWA-TODO-LIST/issues"
   },
-  "homepage": "https://github.com/pulipulichen/HTML-Simple-Classifier#readme",
+  "homepage": "https://github.com/pulipulichen/PWA-TODO-LIST#readme",
   "devDependencies": {
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "7.5.5",
