@@ -1,5 +1,5 @@
 {
-  "name": "PWA-TODO-LIST",
+  "name": "PWA-Todo-List",
   "version": "1.0.0",
   "description": "A to-do list that can save files and only stores data in the browser, allowing for offline use. It is suitable for integration with other systems.",
   "main": "index.js",
