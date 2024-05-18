@@ -16,6 +16,8 @@ A to-do list that can save files and only stores data in the browser, allowing f
 
 # Citation
 
+Chen, Y.-T. (2024). *PWA-Todo-List* (20240518.204022) [Computer software]. Zenodo. [https://doi.org/10.5281/ZENODO.11214044](https://doi.org/10.5281/ZENODO.11214044)
+
 ----
 
 # Drafts
