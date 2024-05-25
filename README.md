@@ -8,7 +8,7 @@ A to-do list that can save files and only stores data in the browser, allowing f
 
 ![](https://blogger.googleusercontent.com/img/a/AVvXsEhnIFJtKrd0QqrWc2KLgVcH9oIXVj00ZhHqj-eeBk4pkgKf7iDoCZsoXyPaz30H05wNzrfEjnrtjhq5AN2XxxvEqo_TO8zCljdGrxQtSYPW7arDmnMZdwuAyeITZtV_xdYgWZ-UrZwaDkKrebN5YJLtAp-dkYvPk03kBXavMzxpB6Z0bVoYM9KnYg)
 
-## Technologies
+## Techniques
 
 - **JavaScript**
 - **PWA**: Progressive Web App 漸進式網路應用程式
